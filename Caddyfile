@@ -1,0 +1,13 @@
+# Lokaler Test-Start mit Caddy:
+# caddy run --config Caddyfile
+#
+# Dann erreichbar unter:
+# http://localhost:8080
+#
+# Das Backend läuft auf Port 3000 und die API wird automatisch an den Node-Server weitergeleitet.
+:8080 {
+    encode gzip
+    root * ./public
+    file_server
+    reverse_proxy /api/* 127.0.0.1:3000
+}

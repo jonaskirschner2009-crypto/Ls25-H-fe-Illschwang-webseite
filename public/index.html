@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>Höfe der Gemeinde Illschwang - LS25 · v81</title>
+    <link rel="icon" type="image/jpeg" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="stylesheet" href="tailwind.css">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+    <body class="bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans transition-colors duration-300">
+    <!-- v28 App-Navigation -->
+    <nav id="app-topnav" aria-label="Hauptnavigation">
+      <div class="nav-inner">
+        <button id="mobile-menu-toggle" type="button" onclick="toggleMobileSidebar()" aria-label="Menü öffnen">☰</button>
+        <button class="site-brand" type="button" onclick="showAppView('home')" aria-label="Zur Startseite">
+          <span class="site-brand-logo-wrap"><img src="logo.png" alt="Illschwang Logo"></span>
+          <span class="site-brand-copy"><strong>Höfe der Illschwang</strong><small>Gemeinde Illschwang</small></span>
+        </button>
+        <div class="desktop-nav flex items-center gap-1">
+          <button class="app-nav-btn" data-view="home" onclick="showAppView('home')">🏠 Start</button>
+          <button class="app-nav-btn" data-view="farms" onclick="showAppView('farms')">🏡 Höfe</button>
+          <button class="app-nav-btn" data-view="finder" onclick="showAppView('finder')">🔎 Finder</button>
+          <button class="app-nav-btn" data-view="favorites" onclick="showAppView('favorites')">❤️ Merkliste</button>
+          <button class="app-nav-btn" data-view="compare" onclick="showAppView('compare')">⚖️ Vergleich</button>
+          <button class="app-nav-btn" data-view="applications" onclick="showAppView('applications')">📨 Anträge</button>
+          <button class="app-nav-btn" data-view="profile" onclick="showAppView('profile')">👤 Mein Bereich</button>
+        </div>
+      </div>
+    </nav>
+    <div id="mobile-menu" aria-hidden="true">
+      <div id="mobile-menu-backdrop" onclick="toggleMobileSidebar(false)"></div>
+      <aside id="mobile-sidebar" aria-label="Menü">
+        <div class="mobile-sidebar-brand">
+          <button type="button" class="mobile-sidebar-brand-main" onclick="showAppView('home');toggleMobileSidebar(false)" aria-label="Zur Startseite">
+            <img src="logo.png" alt="Illschwang Logo">
+            <span><strong>Höfe der Illschwang</strong><small>Gemeinde Illschwang</small></span>
+          </button>
+          <button type="button" onclick="toggleMobileSidebar(false)" class="mobile-sidebar-close" aria-label="Menü schließen">×</button>
+        </div>
+        <button class="mobile-nav-btn" data-view="home" onclick="showAppView('home');toggleMobileSidebar(false)">🏠 <span>Startseite</span></button>
+        <button class="mobile-nav-btn" data-view="farms" onclick="showAppView('farms');toggleMobileSidebar(false)">🏡 <span>Höfe</span></button>
+        <button class="mobile-nav-btn" data-view="finder" onclick="showAppView('finder');toggleMobileSidebar(false)">🔎 <span>Hof-Finder</span></button>
+        <div class="mobile-nav-divider"></div>
+        <button class="mobile-nav-btn" data-view="favorites" onclick="showAppView('favorites');toggleMobileSidebar(false)">❤️ <span>Merkliste</span></button>
+        <button class="mobile-nav-btn" data-view="compare" onclick="showAppView('compare');toggleMobileSidebar(false)">⚖️ <span>Vergleich</span></button>
+        <button class="mobile-nav-btn" data-view="applications" onclick="showAppView('applications');toggleMobileSidebar(false)">📨 <span>Kaufanträge</span></button>
+        <button class="mobile-nav-btn" data-view="profile" onclick="showAppView('profile');toggleMobileSidebar(false)">👤 <span>Mein Bereich</span></button>
+        <div class="mobile-nav-divider"></div>
+        <button id="mobile-admin-nav" class="mobile-nav-btn hidden" onclick="openAdminFromNavigation();toggleMobileSidebar(false)">⚙️ <span>Verwaltung</span></button>
+      </aside>
+    </div>
+
+
+    <!-- Header mit Original-Cover und echtem Logo -->
+    <header class="hero-cover relative bg-cover bg-center py-24 md:py-32 px-4 text-center shadow-2xl border-b border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="hero-overlay absolute inset-0 bg-slate-950/75 dark:bg-slate-950/85 backdrop-blur-[2px]"></div>
+
+        <!-- Kopfbereich: Theme + eigenes Admin-Menü -->
+        <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
+            <button id="user-account-button" type="button" onclick="openUserAccount('login')" class="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-white/90 dark:bg-slate-900/90 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition shadow-lg backdrop-blur-md cursor-pointer"><span id="user-account-label">👤 Anmelden</span></button>
+            <button onclick="toggleTheme()" class="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-white/80 dark:bg-slate-900/80 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition shadow-lg backdrop-blur-md cursor-pointer">
+                <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+            </button>
+            <button id="admin-preview-exit" type="button" onclick="stopUserPreview()" class="hidden items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 border border-amber-200 transition shadow-lg cursor-pointer">🛠️ Superadmin zurück</button>
+
+            <div class="relative hidden" id="admin-menu-container">
+                <button onclick="toggleAdminMenu(event)" id="admin-menu-button" class="flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold bg-white/90 dark:bg-slate-900/90 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition shadow-lg backdrop-blur-md cursor-pointer">
+                    <span>⚙️</span><span id="admin-menu-label">Admin</span><span id="admin-menu-arrow">▼</span>
+                </button>
+                <div id="admin-menu-panel" class="admin-menu-panel hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl p-2 text-left">
+                    <div class="px-3 py-2 mb-1">
+                        <div class="text-xs uppercase tracking-wider font-bold text-slate-400">Verwaltung</div>
+                        <div id="admin-menu-status" class="text-sm font-bold mt-1">Nicht angemeldet</div>
+                    </div>
+                    <button id="admin-login-action" onclick="openAdminLogin()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition cursor-pointer">🔐 Admin einloggen</button>
+                    <div id="admin-actions" class="hidden space-y-1">
+                        <button onclick="openAdminDashboard()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">📊 Dashboard</button>
+                         <button onclick="openAdminProfiles()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">👥 Admin-Profile</button>
+                        <button onclick="openAdminLogs()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">📋 Änderungs-Log</button>
+                        <button onclick="openPurchaseApplications()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">📨 Kaufanträge <span id="purchase-unread-badge" class="ml-auto hidden px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px]"></span></button>
+                        <button data-admin-capability="sync" onclick="openTechnicalSettings()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition cursor-pointer">🛠️ Technische Verwaltung</button>
+                         <button data-admin-capability="edit" onclick="openHofManagement()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">🏡 Hof-Verwaltung</button>
+                         <button data-admin-capability="edit" onclick="openBusinessManagement()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">🏢 Betriebsnamen</button>
+                        <button onclick="openOwnProfile()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">⚙️ Mein Profil</button>
+                        <button data-admin-capability="superadmin" onclick="openUserPreviewChooser()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition cursor-pointer">👤 Benutzerrolle beobachten</button>
+                        <button id="admin-logout-action" type="button" onclick="logoutAdmin(event)" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer">↪️ Admin ausloggen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-content relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+            <div class="hero-logo-mark w-32 h-32 rounded-full border-2 border-emerald-500/80 shadow-2xl relative overflow-hidden mb-6 bg-slate-950 flex items-center justify-center">
+                <img src="logo.png" alt="Illschwang Logo" class="w-full h-full object-cover">
+            </div>
+
+            <span class="hero-kicker text-emerald-400 font-bold tracking-widest uppercase text-xs md:text-sm mb-2 drop-shadow-md">Gemeinde Illschwang • LS25 Projekt</span>
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white mb-3 drop-shadow-lg">HOFVORSTELLUNG</h1>
+            <p class="text-emerald-300/90 font-medium text-sm md:text-base tracking-wide uppercase mb-2">Die Höfe der Gemeinde Illschwang</p>
+            <p class="text-slate-200 text-xs md:text-sm max-w-lg italic bg-slate-900/40 px-4 py-1.5 rounded-full border border-slate-700/50 backdrop-blur-sm">
+                „Gemeinsam. Realistisch. Illschwang. Alle Infos, Preise & Details auf einen Blick.“
+            </p>
+        </div>
+    </header>
+
+    <!-- Hauptcontainer -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+
+        <!-- Hof des Tages + Vergleich -->
+        <section id="hof-day-section" class="day-card rounded-2xl p-5 mb-8">
+            <div class="day-card-layout flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-start gap-4 min-w-0">
+                    <div class="text-4xl shrink-0">⭐</div>
+                    <div class="min-w-0">
+                        <div class="text-xs uppercase tracking-wider font-black text-emerald-600 dark:text-emerald-400">Hof des Tages</div>
+                        <h2 id="hof-day-title" class="text-2xl font-black mt-1 break-words">—</h2>
+                        <p id="hof-day-meta" class="text-sm text-slate-600 dark:text-slate-300 mt-1">—</p>
+                        <p id="hof-day-description" class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">—</p>
+                    </div>
+                </div>
+                <div class="day-card-actions flex flex-wrap gap-2 shrink-0">
+                    <button type="button" onclick="openHofDay()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold">🏡 Exposé öffnen</button>
+                    <button type="button" onclick="toggleDayFavorite()" id="hof-day-favorite" class="px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-bold">☆ Merken</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="hof-compare-panel" class="hidden mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <div><div class="text-xs uppercase tracking-wider font-bold text-amber-600 dark:text-amber-400">Entscheidungshilfe</div><h2 class="text-2xl font-black mt-1">⚖️ Hofvergleich</h2><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Vergleiche bis zu drei Höfe direkt nebeneinander.</p></div>
+                <button id="compare-clear-button" type="button" onclick="clearHofCompare()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-sm font-semibold">↺ Vergleich leeren</button>
+            </div>
+            <div id="hof-compare-content" class="overflow-x-auto"></div>
+        </section>
+
+        <!-- Erweiterter Hof-Finder 2.0 -->
+        <div id="hof-finder-panel" data-open="false" class="hidden bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-900/60 p-5 rounded-xl shadow-sm mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                <div>
+                    <div class="text-xs uppercase tracking-wider font-bold text-indigo-600 dark:text-indigo-400">Erweiterte Suche</div>
+                    <h2 class="text-xl font-black mt-1">🔧 Hof-Finder 2.0</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Grenzen setzen, mehrere Merkmale kombinieren und direkt passende Höfe sehen.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="toggleFinderFreeOnly()" id="finder-free-only" class="px-3 py-2 rounded-lg text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">🏷️ Nur zu verkaufen</button>
+                    <button type="button" onclick="toggleFinderFavoritesOnly()" id="finder-favorites-only" class="px-3 py-2 rounded-lg text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">★ Nur Favoriten</button>
+                    <button type="button" onclick="resetHofFinder()" class="px-3 py-2 rounded-lg text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">↺ Zurücksetzen</button>
+                </div>
+            </div>
+
+            <div id="finder-analysis" class="mb-5"></div>
+            <div id="finder-ai-results" class="mb-5"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between gap-3 mb-2"><label for="finder-price-min-range" class="text-xs font-bold text-slate-500 dark:text-slate-400">Mindestpreis</label><span id="finder-price-min-label" class="text-xs font-black">0 €</span></div>
+                    <input id="finder-price-min-range" type="range" min="0" max="1500000" step="10000" value="0" oninput="setFinderRange('priceMin',this.value)" class="w-full accent-indigo-600">
+                    <div class="flex justify-between gap-3 mt-3 mb-2"><label for="finder-price-max-range" class="text-xs font-bold text-slate-500 dark:text-slate-400">Maximalpreis</label><span id="finder-price-max-label" class="text-xs font-black">1.500.000 €</span></div>
+                    <input id="finder-price-max-range" type="range" min="0" max="1500000" step="10000" value="1500000" oninput="setFinderRange('priceMax',this.value)" class="w-full accent-indigo-600">
+                </div>
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between gap-3 mb-2"><label for="finder-area-min-range" class="text-xs font-bold text-slate-500 dark:text-slate-400">Mindestgröße</label><span id="finder-area-min-label" class="text-xs font-black">0 ha</span></div>
+                    <input id="finder-area-min-range" type="range" min="0" max="100" step="0.1" value="0" oninput="setFinderRange('areaMin',this.value)" class="w-full accent-indigo-600">
+                    <div class="flex justify-between gap-3 mt-3 mb-2"><label for="finder-area-max-range" class="text-xs font-bold text-slate-500 dark:text-slate-400">Maximalgröße</label><span id="finder-area-max-label" class="text-xs font-black">100 ha</span></div>
+                    <input id="finder-area-max-range" type="range" min="0" max="100" step="0.1" value="100" oninput="setFinderRange('areaMax',this.value)" class="w-full accent-indigo-600">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+                <div><label for="finder-type" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Betriebsart</label><select id="finder-type" onchange="setFinderFilter('type',this.value)" class="w-full px-3 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:border-indigo-500"><option value="">Alle Betriebsarten</option><option value="Ackerbau">🌾 Ackerbau</option><option value="Gemischtbetrieb">🚜 Gemischtbetrieb</option><option value="Tierhaltung">🐄 Tierhaltung</option><option value="Schweine">🐖 Schweine</option><option value="Milchvieh">🐄 Milchvieh</option><option value="Geflügel">🐔 Geflügel</option><option value="Schafe">🐑 Schafe</option><option value="Pferde">🐎 Pferde</option><option value="Sonstiges">🏡 Sonstiges</option></select></div>
+                <div><label for="finder-animal" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Tierhaltung</label><select id="finder-animal" onchange="setFinderFilter('animal',this.value)" class="w-full px-3 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:border-indigo-500"><option value="">Alle Tierarten</option><option value="keine">🚫 Keine Tiere</option><option value="Schweine">🐖 Schweine</option><option value="Milchvieh">🐄 Milchvieh</option><option value="Rinder">🐂 Rinder</option><option value="Geflügel">🐔 Geflügel</option><option value="Schafe">🐑 Schafe</option><option value="Pferde">🐎 Pferde</option></select></div>
+                <div><label for="finder-equipment" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Ausstattung / Suchbegriff</label><input id="finder-equipment" type="search" oninput="setFinderFilter('equipment',this.value)" placeholder="z. B. Halle, Silo, Werkstatt" class="w-full px-3 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:border-indigo-500"></div>
+                <div><label for="finder-sort" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Sortierung</label><select id="finder-sort" onchange="setFinderFilter('sort',this.value)" class="w-full px-3 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:border-indigo-500"><option value="default">Standard</option><option value="price-asc">Preis: niedrig → hoch</option><option value="price-desc">Preis: hoch → niedrig</option><option value="area-asc">Hofgröße: klein → groß</option><option value="area-desc">Hofgröße: groß → klein</option><option value="name">Name A → Z</option></select></div>
+            </div>
+            <div id="finder-active-filters" class="flex flex-wrap gap-2 mt-5"></div>
+            <div id="finder-result-count" class="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-4"></div>
+        </div>
+
+                <!-- Interaktive Hofkarte -->
+        
+
+        <section id="view-profile" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-8">
+          <div class="flex items-start gap-4">
+            <div class="text-4xl">👤</div>
+            <div>
+              <div class="text-xs uppercase tracking-wider font-bold text-indigo-500">Mein Bereich</div>
+              <h2 class="text-2xl font-black mt-1">Einstellungen & persönliche Ansicht</h2>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Ein Benutzerkonto ist aktuell nicht erforderlich. Deine lokalen Einstellungen bleiben auf diesem Gerät gespeichert.</p>
+            </div>
+          </div>
+          <div id="profile-account-card" class="mt-6 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/20"></div>
+          <div class="grid sm:grid-cols-2 gap-3 mt-6">
+            <button onclick="toggleTheme()" class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">🌙 <span id="profile-theme-text">Darstellung wechseln</span><div class="text-xs font-normal text-slate-500 mt-1">Dark Mode / Light Mode</div></button>
+            <button onclick="showAppView('favorites')" class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">❤️ Merkliste öffnen<div class="text-xs font-normal text-slate-500 mt-1">Gespeicherte Höfe ansehen</div></button>
+            <button onclick="showAppView('applications')" class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">📨 Kaufanträge<div class="text-xs font-normal text-slate-500 mt-1">Antrag über die ID verfolgen</div></button>
+            <button onclick="showAppView('compare')" class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">⚖️ Hofvergleich<div class="text-xs font-normal text-slate-500 mt-1">Bis zu drei Höfe vergleichen</div></button>
+            <button id="profile-motion-toggle" aria-pressed="true" onclick="toggleMotion()" class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">✨ <span id="profile-motion-text">Animationen: Ein</span><div class="text-xs font-normal text-slate-500 mt-1">Bereichswechsel-Animation an/aus</div></button>
+          </div>
+        </section>
+
+                <section id="view-applications" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-8">
+                    <div class="flex items-start gap-4">
+                        <div class="text-4xl">📨</div>
+                        <div>
+                            <div class="text-xs uppercase tracking-wider font-bold text-violet-500">Kaufanträge</div>
+                            <h2 class="text-2xl font-black mt-1">Antrag verfolgen</h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Prüfe den aktuellen Stand eines bereits gesendeten Kaufantrags mit seiner Antragsnummer.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                        <button type="button" onclick="openApplicationTracker()" class="px-4 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold">📨 Antrag mit ID verfolgen</button>
+                        <button type="button" onclick="showAppView('farms')" class="px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 font-semibold">🏡 Zu den Höfen</button>
+                    </div>
+                </section>
+
+        <!-- Raster für die Höfe -->
+        <div id="hoefe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden my-8 transition-all max-h-[90vh] flex flex-col relative">
+
+            <!-- Dynamische Bildergalerie im Immobilien-Stil -->
+            <div id="modal-image-container" class="hidden"></div>
+
+            <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-start bg-slate-50 dark:bg-slate-950/50">
+                <div class="w-full">
+                    <h2 id="modal-title" class="text-2xl font-black tracking-tight"></h2>
+                    <input type="text" id="edit-title" class="hidden w-full px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-xl font-bold mb-2">
+                    <p id="modal-slogan" class="text-sm text-emerald-600 dark:text-emerald-400 font-medium italic mt-1"></p>
+                    <input type="text" id="edit-slogan" class="hidden w-full px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm mb-2">
+                    <div id="edit-masterdata" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                      <input id="edit-groesse" type="text" placeholder="Hofgröße, z. B. 125 ha" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm">
+                      <input id="edit-flaechen" type="text" placeholder="Flächen" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm">
+                      <input id="edit-tierhaltung" type="text" placeholder="Tierhaltung" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm">
+                      <input id="edit-schwerpunkt" type="text" placeholder="Schwerpunkt" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm">
+                      <input id="edit-zielgruppe" type="text" placeholder="Geeignet für" class="px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm sm:col-span-2">
+                    </div>
+
+                    <div id="modal-quickstats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+                        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3">
+                            <div class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Preis</div>
+                            <div id="quick-price" class="font-black text-base mt-1">—</div>
+                        </div>
+                        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3">
+                            <div class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Größe</div>
+                            <div id="quick-area" class="font-black text-base mt-1">—</div>
+                        </div>
+                        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3">
+                            <div class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Schwerpunkt</div>
+                            <div id="quick-focus" class="font-black text-sm mt-1 truncate">—</div>
+                        </div>
+                        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3">
+                            <div class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Bilder</div>
+                            <div id="quick-images" class="font-black text-base mt-1">—</div>
+                        </div>
+                    </div>
+
+                    <div id="edit-image-container" class="hidden mt-4">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Hof-Bilder hinzufügen (Mehrfachauswahl möglich)</label>
+                        <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-6 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition flex flex-col items-center justify-center gap-2">
+                            <span class="text-2xl">📸</span>
+                            <span id="drop-zone-text" class="text-sm text-slate-500 dark:text-slate-400">Bilder anklicken oder per Drag & Drop hierher ziehen</span>
+                            <input type="file" id="file-input" class="hidden" accept="image/*" multiple>
+                        </div>
+                        <div id="edit-image-manager" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3"></div>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-2 rounded-lg text-lg font-bold cursor-pointer ml-4">✕</button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-6 flex-grow no-scrollbar">
+                <div id="modal-status-box" class="p-4 rounded-xl border flex justify-between items-center">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider font-bold block text-slate-400">Aktueller Status</span>
+                        <span id="modal-status-text" class="font-bold text-base"></span>
+                    </div>
+                    <div id="modal-kaeufer-container" class="text-right hidden">
+                        <span class="text-xs uppercase tracking-wider font-bold block text-red-600 dark:text-red-400">Verkauft an</span>
+                        <span id="modal-kaeufer-name" class="font-black text-lg"></span>
+                    </div>
+                </div>
+
+                <div id="purchase-request-box" class="hidden bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 p-4 rounded-xl">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="font-black text-emerald-800 dark:text-emerald-300">🏡 Interesse an diesem Hof?</div>
+                            <p class="text-xs text-emerald-700/80 dark:text-emerald-300/70 mt-1">Stelle direkt über die Webseite einen Kaufantrag. Der Antrag wird anschließend in der Verwaltung angezeigt.</p>
+                        </div>
+                        <button type="button" onclick="openPurchaseModal()" class="shrink-0 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold shadow-sm transition cursor-pointer">📨 Kaufantrag stellen</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Über den Hof</h3>
+                    <p id="modal-beschreibung" class="text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p>
+                </div>
+                <textarea id="edit-beschreibung" rows="5" class="hidden w-full px-3 py-2 bg-white dark:bg-slate-800 border rounded-lg text-sm"></textarea>
+
+                <div>
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Steckbrief:</h3>
+                    <div class="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden text-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
+                                    <th class="p-3 font-semibold">Kategorie</th>
+                                    <th class="p-3 font-semibold">Information</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-steckbrief" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 p-4">
+                    <div class="flex items-center justify-between gap-3 mb-2">
+                        <h3 class="font-bold text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400">Ausstattung & Betrieb</h3>
+                        <span class="text-xs font-semibold text-slate-400">Hofprofil</span>
+                    </div>
+                    <div id="modal-profile-tags" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Preisübersicht:</h3>
+                    <div class="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden text-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
+                                    <th class="p-3 font-semibold w-12">Pos.</th>
+                                    <th class="p-3 font-semibold">Bezeichnung</th>
+                                    <th class="p-3 font-semibold text-right">Preis (Stück)</th>
+                                    <th class="p-3 font-semibold text-right">Preis (Gesamt)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-preise" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                    <div class="flex justify-end mt-3">
+                        <div class="text-right pt-2 pb-2 px-4 border-t-2 border-b-4 border-double border-slate-900 dark:border-white">
+                            <span id="modal-gesamtpreis" class="text-xl font-black"></span>
+                        </div>
+                    </div>
+                    <div id="edit-preise-container" class="hidden mt-4 space-y-3">
+                        <div class="flex items-center justify-between gap-3">
+                            <label for="edit-gesamtpreis" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Gesamtpreis</label>
+                            <input id="edit-gesamtpreis" type="text" class="w-44 px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-sm font-bold text-right">
+                        </div>
+                        <div id="edit-preise-list" class="space-y-2"></div>
+                        <button type="button" onclick="addPriceEditRow()" class="px-3 py-2 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition">＋ Preisposition hinzufügen</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Für wen ist dieser Hof geeignet?</h3>
+                    <p id="modal-zielgruppe" class="text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p>
+                </div>
+
+                <div class="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 p-4 rounded-xl text-center">
+                    <p class="text-sm font-medium text-emerald-800 dark:text-emerald-300">Bei Interesse melden Sie sich gerne bei Frau Neumann.</p>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 flex justify-between items-center gap-2 flex-wrap">
+                <button type="button" onclick="editKaeuferFromModal()" id="modal-edit-kaeufer-btn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition cursor-pointer hidden">Käufer bearbeiten</button>
+                <div class="flex gap-2 ml-auto flex-wrap">
+                    <button type="button" onclick="toggleEditMode()" id="admin-edit-btn" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white text-sm font-semibold rounded-lg transition hidden">✏️ Hof bearbeiten</button>
+                    <button type="button" onclick="saveHofEdits()" id="admin-save-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition hidden">💾 Speichern</button>
+                    <button type="button" onclick="closeModal()" class="px-5 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-sm font-semibold rounded-lg transition cursor-pointer">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-account-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[82] hidden flex items-center justify-center p-4">
+      <form onsubmit="submitUserAccount(event)" class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6">
+        <div class="flex items-start justify-between gap-4 mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Freiwilliges Konto</div><h3 id="user-account-title" class="text-xl font-black mt-1">👤 Anmelden</h3></div><button type="button" onclick="closeUserAccount()" class="p-2 text-slate-400 hover:text-slate-800 dark:hover:text-white">✕</button></div>
+        <p id="user-account-hint" class="text-sm text-slate-500 dark:text-slate-400 mb-5">Das Konto ist freiwillig. Die Website funktioniert auch ohne Anmeldung.</p>
+        <div id="user-account-type-switch" class="flex gap-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 mb-5">
+          <button type="button" id="user-mode-button" onclick="openUserAccount('login')" class="flex-1 px-3 py-2 rounded-lg text-sm font-bold bg-white dark:bg-slate-700 shadow-sm">👤 Benutzer</button>
+          <button type="button" id="admin-mode-button" onclick="openUserAccount('admin')" class="flex-1 px-3 py-2 rounded-lg text-sm font-bold text-slate-500 dark:text-slate-400">🔐 Admin</button>
+        </div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2" for="user-account-username">Benutzername</label>
+        <input id="user-account-username" autocomplete="username" type="text" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 mb-3" placeholder="z. B. Jonas">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2" for="user-account-password">Passwort</label>
+        <input id="user-account-password" autocomplete="current-password" type="password" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800" placeholder="Mindestens 8 Zeichen">
+        <p id="user-account-error" class="hidden text-sm text-red-600 dark:text-red-400 font-semibold mt-3"></p>
+        <div class="flex flex-wrap justify-between items-center gap-2 mt-5"><button type="button" id="user-account-switch" onclick="toggleUserAccountMode()" class="text-sm font-semibold text-emerald-600 hover:underline">Noch kein Konto? Konto erstellen</button><button id="user-account-submit" type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold">Anmelden</button></div>
+      </form>
+    </div>
+
+    <!-- Admin Profile -->
+    <div id="admin-profiles-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[85] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-start justify-between gap-4 mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Verwaltung</div><h3 class="text-xl font-black mt-1">Admin-Profile</h3><p class="text-xs text-slate-500 mt-1">Admin-Profile werden sicher im Backend verwaltet. Passwörter werden nicht an den Browser ausgeliefert.</p><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Mehrere Personen können eigene Zugangsdaten haben.</p></div><button onclick="closeAdminProfiles()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">✕</button></div>
+            <div id="admin-profile-list" class="space-y-2 mb-5"></div>
+            <div class="border-t border-slate-200 dark:border-slate-800 pt-5"><h4 id="profile-form-title" class="font-bold mb-3">Neues Profil</h4>
+                <div class="grid sm:grid-cols-3 gap-3"><input id="profile-username" type="text" placeholder="Benutzername" class="px-3 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm"><input id="profile-password" type="password" placeholder="Passwort (bei Änderung optional)" class="px-3 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm"><select id="profile-role" class="px-3 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm"><option value="superadmin">Superadmin</option><option value="admin">Admin</option><option value="editor">Redaktion</option><option value="sales">Verkauf</option></select></div>
+                <div class="flex flex-wrap justify-end gap-2 mt-4"><button onclick="resetProfileForm()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-sm font-semibold">Zurücksetzen</button><button type="button" onclick="resetAdminProfilesToCode()" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm font-semibold">Backend-Profile neu laden</button><button onclick="saveAdminProfile()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-semibold">Profil speichern</button></div><p id="profile-form-error" class="hidden text-sm text-red-600 dark:text-red-400 font-semibold mt-2"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Änderungs-Log -->
+    <div id="admin-logs-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[85] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-3xl rounded-2xl shadow-2xl p-6 max-h-[90vh] flex flex-col">
+            <div class="flex items-start justify-between gap-4 mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Verwaltung</div><h3 class="text-xl font-black mt-1">Änderungs-Log</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Wer hat zuletzt was geändert?</p></div><button onclick="closeAdminLogs()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">✕</button></div>
+            <div id="admin-log-list" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
+            <div class="flex justify-end gap-2 mt-5 pt-4 border-t border-slate-200 dark:border-slate-800"><button onclick="clearAdminLogs()" class="px-4 py-2 bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 rounded-xl text-sm font-semibold">Log löschen</button><button onclick="closeAdminLogs()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-sm font-semibold">Schließen</button></div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[85] hidden flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-start mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Verwaltung</div><h3 class="text-xl font-black mt-1">📊 Dashboard</h3></div><button onclick="closeAdminDashboard()" class="p-2">✕</button></div>
+        <div id="dashboard-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+        <div class="mt-6 grid md:grid-cols-2 gap-4"><div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800"><h4 class="font-black mb-3">Letzte Aktivitäten</h4><div id="dashboard-activity" class="space-y-2 text-sm"></div></div><div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800"><h4 class="font-black mb-3">Kaufanträge</h4><div id="dashboard-applications" class="space-y-2 text-sm"></div></div></div>
+      </div>
+    </div>
+
+    <!-- Hof-Verwaltung -->
+    <div id="hof-management-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[85] hidden flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-start mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Verwaltung</div><h3 class="text-xl font-black mt-1">🏡 Hof-Verwaltung</h3><p class="text-sm text-slate-500 mt-1">Höfe hinzufügen, duplizieren, löschen oder bearbeiten.</p></div><button onclick="closeHofManagement()" class="p-2">✕</button></div>
+        <div id="hof-management-list" class="space-y-2"></div>
+        <div class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-700"><button onclick="createNewHof()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold">＋ Neuen Hof erstellen</button></div>
+      </div>
+    </div>
+
+    <!-- Betriebsnamen-Verwaltung -->
+    <div id="business-management-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[90] hidden flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-start gap-4 mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Verwaltung</div><h3 class="text-xl font-black mt-1">🏢 Betriebsnamen</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Zentrale Liste für „Dein Hof“ bei Kaufanfragen. Diese Namen sind unabhängig von den Höfen zum Verkauf.</p></div><button onclick="closeBusinessManagement()" class="p-2">✕</button></div>
+        <div id="business-management-list" class="space-y-2"></div>
+        <div class="mt-5 pt-5 border-t border-slate-200 dark:border-slate-700">
+          <div class="flex gap-2"><input id="business-new-name" type="text" maxlength="120" placeholder="z. B. Agrarbetrieb Illschwang" class="flex-1 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm"><button onclick="addBusinessName()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm">＋ Hinzufügen</button></div>
+          <p id="business-management-error" class="hidden text-sm text-red-600 dark:text-red-400 font-semibold mt-2"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kaufantrag Status-Tracker -->
+    <div id="application-tracker-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[95] hidden flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 w-full max-w-xl rounded-2xl shadow-2xl p-6">
+        <div class="flex justify-between items-start gap-4 mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-violet-600 dark:text-violet-400">Kaufantrag</div><h3 class="text-2xl font-black mt-1">📨 Antrag verfolgen</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Gib deine Antragsnummer ein, um den aktuellen Stand zu sehen.</p></div><button onclick="closeApplicationTracker()" class="p-2">✕</button></div>
+        <div class="flex gap-2"><input id="tracker-id" class="flex-1 px-3.5 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700" placeholder="z. B. KA-ABC123"><button onclick="trackApplication()" class="px-4 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold">Prüfen</button></div>
+        <div id="tracker-result" class="mt-5"></div>
+      </div>
+    </div>
+
+    <!-- Kaufantrag -->
+    <div id="purchase-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[90] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Kaufantrag</div><h3 class="text-xl font-black mt-1">Hof anfragen</h3><p id="purchase-modal-hof" class="text-sm text-slate-500 dark:text-slate-400 mt-1"></p></div>
+                <button onclick="closePurchaseModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">✕</button>
+            </div>
+            <div class="space-y-4">
+                <div><label for="purchase-name" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Name *</label><input id="purchase-name" type="text" maxlength="80" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="z. B. Max Mustermann"></div>
+                <div><label for="purchase-own-farm" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Dein Betrieb</label><div class="styled-select-wrap"><select id="purchase-own-farm" onchange="togglePurchaseOwnFarm()" class="hoefe-select w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500"></select></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">Wähle deinen bereits angelegten Hof oder lege einen neuen Betriebsnamen für die Anfrage an.</p></div>
+                <div id="purchase-own-farm-new-wrap" class="hidden"><label for="purchase-own-farm-new" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Neuer Betriebsname</label><input id="purchase-own-farm-new" type="text" maxlength="120" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="z. B. Arargarbetrieb Illschwang"><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">Der Admin kann den Betrieb später prüfen und in die zentrale Betriebsliste übernehmen.</p></div>
+                <div><label for="purchase-contact" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Kontaktinfos *</label><input id="purchase-contact" type="text" maxlength="120" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="z. B. @Mustermann"></div>
+                <div><label for="purchase-message" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Nachricht / kurze Vorstellung</label><textarea id="purchase-message" rows="5" maxlength="1000" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="Warum möchtest du den Hof übernehmen?"></textarea></div>
+                <p id="purchase-form-error" class="hidden text-sm text-red-600 dark:text-red-400 font-semibold"></p>
+                <div class="flex flex-col sm:flex-row justify-end gap-2 pt-2">
+                    <button onclick="closePurchaseModal()" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 rounded-xl text-sm font-semibold">Abbrechen</button>
+                    <button onclick="submitPurchaseApplication()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-bold">📨 Antrag absenden</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kaufanträge für Admins -->
+    <div id="purchase-applications-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[95] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl p-6 max-h-[90vh] flex flex-col">
+            <div class="flex items-start justify-between gap-4 mb-5"><div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Verwaltung</div><h3 class="text-xl font-black mt-1">📨 Kaufanträge</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Eingegangene Anfragen von Interessenten.</p></div><button onclick="closePurchaseApplications()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">✕</button></div>
+            <div id="purchase-application-list" class="space-y-3 overflow-y-auto flex-1 pr-1"></div>
+            <div class="flex justify-end gap-2 mt-5 pt-4 border-t border-slate-200 dark:border-slate-800"><button onclick="clearPurchaseApplications()" class="px-4 py-2 bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 rounded-xl text-sm font-semibold">Abgeschlossene ausblenden</button><button onclick="closePurchaseApplications()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-sm font-semibold">Schließen</button></div>
+        </div>
+    </div>
+
+    <!-- Discord-Einstellungen -->
+    <div id="discord-settings-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[98] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <div class="text-xs uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400">Verwaltung</div>
+                    <h3 class="text-xl font-black mt-1">🤖 Discord-Bot</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Der Bot verwaltet Kaufanträge direkt in Discord.</p>
+                </div>
+                <button onclick="closeDiscordSettings()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg">✕</button>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 text-sm">
+                    <b>⚙️ Zentrale Server-Einstellungen</b>
+                    <div id="discord-bot-status" class="mt-1 text-xs text-slate-600 dark:text-slate-300">Bot-Status wird geladen …</div>
+                    <div id="discord-bot-status-detail" class="mt-1 text-xs text-slate-500 dark:text-slate-400"></div>
+                    <div class="mt-1 text-xs text-slate-500 dark:text-slate-400">Token und Kanal-IDs werden dauerhaft auf dem Server gespeichert.</div>
+                </div>
+                <div>
+                    <label for="discord-bot-token" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Discord-Bot-Token</label>
+                    <input id="discord-bot-token" type="password" autocomplete="new-password" placeholder="Token nur beim Einrichten/Ändern eintragen" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Der gespeicherte Token wird niemals vollständig angezeigt.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="discord-application-channel-id" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Kanal-ID für Anträge</label>
+                        <input id="discord-application-channel-id" type="text" inputmode="numeric" placeholder="Discord-Kanal-ID" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label for="discord-updates-channel-id" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Kanal-ID für Updates</label>
+                        <input id="discord-updates-channel-id" type="text" inputmode="numeric" placeholder="Discord-Kanal-ID" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 cursor-pointer">
+                    <input id="discord-bot-enabled" type="checkbox" class="w-4 h-4">
+                    <span><span class="font-bold text-sm">Discord-Bot aktivieren</span><span class="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">Der Bot verarbeitet Anträge und schreibt Status-Updates.</span></span>
+                </label>
+                <p id="discord-settings-status" class="text-sm font-semibold hidden"></p>
+                <div class="flex justify-between gap-2 pt-2">
+                    <button onclick="testDiscordBot()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold">🔎 Bot testen</button>
+                    <div class="flex gap-2">
+                        <button onclick="closeDiscordSettings()" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 rounded-xl text-sm font-semibold">Abbrechen</button>
+                        <button onclick="saveDiscordSettings()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-bold">💾 Speichern</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Eingabe Modal mit modernem Dropdown & Neuerstellung -->
+    <div id="input-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-2xl shadow-2xl overflow-visible p-6">
+            <h3 id="input-modal-title" class="text-lg font-black mb-2">Käufer auswählen</h3>
+            <p id="input-modal-desc" class="text-sm text-slate-500 dark:text-slate-400 mb-4">Wähle einen Betrieb aus oder erstelle einen neuen:</p>
+            
+            <!-- Custom Styled Dropdown Container -->
+            <div class="relative w-full mb-4" id="custom-dropdown-container">
+                <button type="button" onclick="toggleCustomDropdown()" id="custom-dropdown-trigger" class="w-full flex items-center justify-between px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-500 transition cursor-pointer shadow-sm">
+                    <span id="custom-dropdown-selected" class="flex items-center gap-2 truncate">
+                        <span>🛒</span>
+                        <span class="text-slate-400">|</span>
+                        <span>Fahrzeughändler</span>
+                    </span>
+                    <span id="custom-dropdown-arrow" class="text-xs text-slate-400 transition-transform">▼</span>
+                </button>
+
+                <div id="custom-dropdown-options" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden max-h-60 overflow-y-auto no-scrollbar">
+                </div>
+            </div>
+
+            <!-- Eingabefeld für neuen Käufer -->
+            <div id="custom-input-container" class="hidden mb-4">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Neuen Betrieb/Käufer eintragen:</label>
+                <input type="text" id="input-modal-field" class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500 text-slate-900 dark:text-slate-100" placeholder="z. B. 🏡 | Neuer Hof Name...">
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="closeInputModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-sm font-semibold rounded-xl transition cursor-pointer">Abbrechen</button>
+                <button onclick="saveInputModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl transition cursor-pointer">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+
+        <!-- Technische Admin-Werkzeuge -->
+        <div id="technical-admin-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[96] hidden flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 w-full max-w-md rounded-2xl shadow-2xl p-6">
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div><div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Admin-Werkzeuge</div><h3 class="text-xl font-black mt-1">🛠️ Technische Verwaltung</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Backend, Discord und manuelle Synchronisation an einem Ort.</p></div>
+                    <button type="button" onclick="closeTechnicalSettings()" class="p-2">✕</button>
+                </div>
+                <div class="space-y-2">
+                    <button data-admin-capability="superadmin" type="button" onclick="openCloudSettings()" class="w-full flex items-center gap-3 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700"><span class="text-xl">🔌</span><span>Backend-Verbindung<small class="block text-xs font-normal text-slate-500 mt-0.5">Serveradresse und Cloud-Zugang</small></span></button>
+                    <button data-admin-capability="superadmin" type="button" onclick="openDiscordSettings()" class="w-full flex items-center gap-3 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700"><span class="text-xl">💬</span><span>Discord-Einstellungen<small class="block text-xs font-normal text-slate-500 mt-0.5">Bot und Kanäle verwalten</small></span></button>
+                    <button data-admin-capability="sync" type="button" onclick="syncCloudNow()" class="w-full flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-left font-bold text-emerald-800 dark:text-emerald-200 hover:bg-emerald-100 dark:hover:bg-emerald-950/50"><span class="text-xl">☁️</span><span>Jetzt synchronisieren<small class="block text-xs font-normal text-emerald-700/70 dark:text-emerald-300/70 mt-0.5">Manueller Abgleich mit dem Backend</small></span></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-preview-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[97] hidden flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 w-full max-w-md rounded-2xl shadow-2xl p-6">
+                <div class="flex items-start justify-between gap-4 mb-5">
+                    <div><div class="text-xs uppercase tracking-wider font-bold text-amber-600">Entwickleransicht</div><h3 class="text-xl font-black mt-1">👤 Rolle beobachten</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Die Vorschau ist schreibgeschützt. Dein Superadmin bleibt angemeldet.</p></div>
+                    <button type="button" onclick="closeUserPreviewChooser()" class="p-2">✕</button>
+                </div>
+                <div class="grid gap-2">
+                    <button type="button" onclick="startUserPreview('user')" class="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">👤 Normaler Benutzer<small class="block text-xs font-normal text-slate-500 mt-0.5">Öffentliche Funktionen, Konto, Favoriten und Anträge</small></button>
+                    <button type="button" onclick="startUserPreview('admin')" class="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">🛠️ Admin<small class="block text-xs font-normal text-slate-500 mt-0.5">Normale Verwaltungsfunktionen</small></button>
+                    <button type="button" onclick="startUserPreview('editor')" class="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">✏️ Redaktion<small class="block text-xs font-normal text-slate-500 mt-0.5">Hof- und Inhaltsbearbeitung</small></button>
+                    <button type="button" onclick="startUserPreview('sales')" class="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-left font-bold hover:bg-slate-200 dark:hover:bg-slate-700">📨 Verkauf<small class="block text-xs font-normal text-slate-500 mt-0.5">Kaufanträge und Verkaufsstatus</small></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cloud-Dialog: keine Browser-Prompts für Backend/Sync -->
+    <div id="cloud-auth-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[95] hidden items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl p-6">
+        <div class="flex justify-between items-start mb-5">
+          <div>
+            <div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Cloud-Synchronisation</div>
+            <h3 id="cloud-auth-title" class="text-xl font-black mt-1">☁️ Backend verbinden</h3>
+            <p id="cloud-auth-hint" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Die Website versucht zuerst automatisch deinen aktuell angemeldeten Admin zu verwenden.</p>
+          </div>
+          <button type="button" onclick="closeCloudAuthModal()" class="p-2">✕</button>
+        </div>
+        <form id="cloud-auth-form" onsubmit="submitCloudAuth(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Backend-Adresse</label>
+            <input id="cloud-auth-api" type="url" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="http://localhost:3000">
+          </div>
+          <div id="cloud-auth-credentials" class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Admin-Benutzername</label>
+              <input id="cloud-auth-user" type="text" autocomplete="username" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Admin-Passwort</label>
+              <input id="cloud-auth-password" type="password" autocomplete="current-password" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="Nur nötig, falls die automatische Anmeldung nicht klappt">
+            </div>
+          </div>
+          <div id="cloud-auth-error" class="hidden text-sm font-semibold text-red-600 dark:text-red-400"></div>
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" onclick="closeCloudAuthModal()" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 rounded-xl text-sm font-semibold">Abbrechen</button>
+            <button id="cloud-auth-submit" type="submit" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-bold">Verbinden</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-200 dark:bg-slate-900 border-t border-slate-300 dark:border-slate-800 text-slate-600 dark:text-slate-400 py-8 text-center mt-16 text-sm transition-colors relative">
+        <p class="font-medium text-slate-700 dark:text-slate-300">Bei Interesse an einem Hof melden Sie sich gerne bei Frau Neumann.</p>
+        <p class="mt-2 text-xs text-slate-500 tracking-wider font-medium">Gemeinde Illschwang • Farming Simulator 25 Projekt</p>
+    </footer>
+
+    <!-- JavaScript Logik & Daten: ausgelagert nach app.js -->
+
+
+
+
+
+
+
+
+    <script src="app.js"></script>
+</body>
+</html>
