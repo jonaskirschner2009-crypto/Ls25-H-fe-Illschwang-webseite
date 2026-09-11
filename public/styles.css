@@ -213,9 +213,7 @@
 
         .admin-stat-card{border:1px solid rgba(148,163,184,.25);border-radius:1rem;padding:1rem;background:rgba(255,255,255,.75)}
         .dark .admin-stat-card{background:rgba(15,23,42,.75)}
-        .favorite-active{color:#f59e0b!important}.favorite-btn{min-width:42px;min-height:42px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:9999px;font-size:1.45rem;line-height:1;cursor:pointer;touch-action:manipulation}.favorite-btn:hover{background:rgba(245,158,11,.14)}.favorite-btn:focus-visible{outline:3px solid rgba(16,185,129,.55);outline-offset:2px}
-        .search-highlight{box-shadow:0 0 0 2px rgba(16,185,129,.35)}
-    
+.favorite-active{color:#e11d48!important;background:transparent!important}.favorite-btn{min-width:42px;min-height:42px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:0;font-size:1.45rem;line-height:1;cursor:pointer;touch-action:manipulation;color:#94a3b8;background:transparent}.favorite-btn:hover{background:transparent;color:#e11d48}.favorite-btn:focus-visible{outline:3px solid rgba(16,185,129,.55);outline-offset:2px}
             /* Exposé-Optik für die Hof-Detailansicht */
             #modal-quickstats > div { transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
             #modal-quickstats > div:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(15,23,42,.08); }
@@ -228,7 +226,7 @@
 
 
         /* ==================== MOBILE-FIRST FEINSCHLIFF v20 ==================== */
-        html, body { max-width: 100%; overflow-x: hidden; }
+        html, body { max-width: 100%; overflow-x: auto; }
         body { -webkit-text-size-adjust: 100%; }
         button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
         button, select { touch-action: manipulation; }
@@ -510,8 +508,28 @@ header.hero-cover:has(#admin-menu-panel:not(.hidden)) { z-index: 1000 !important
 #mobile-menu{z-index:200!important;}
 #mobile-sidebar{padding-top:max(1rem,env(safe-area-inset-top));padding-bottom:max(1rem,env(safe-area-inset-bottom));}
 body.mobile-sidebar-open{overflow:hidden!important;}
-.app-nav-btn,.mobile-nav-btn{touch-action:manipulation;-webkit-user-select:none;user-select:none;}
-@media(max-width:767px){
+.app-nav-btn,.mobile-nav-btn{touch-action:manipulation;-webkit-user-select:none;user-select:none;}.compare-table-wrap{width:100%;overflow-x:auto;border:1px solid rgba(148,163,184,.14);border-radius:1rem;background:rgba(15,23,42,.45);scrollbar-width:none;-ms-overflow-style:none;padding-left:1rem;padding-right:1rem;box-sizing:border-box}
+.compare-table-wrap::-webkit-scrollbar{display:none}.compare-table{width:100%;min-width:820px;border-collapse:collapse;color:#e5eef7;font-size:.95rem}
+.compare-table th{background:#0f172a;color:#e2e8f0;letter-spacing:.02em}
+.compare-table td,.compare-table th{padding:.95rem 1rem;border-bottom:1px solid rgba(148,163,184,.22);border-right:1px solid rgba(148,163,184,.14)}
+.compare-table tr:last-child td{border-bottom:0}
+.compare-table tr:nth-child(even) td{background:rgba(30,41,59,.4)}
+.compare-table-label{font-weight:800;text-align:left;white-space:nowrap;color:#cbd5e1}
+.compare-metric-head{width:150px;background:#111827;color:#f8fafc}
+.compare-hof-head{background:#111827;color:#e2e8f0}
+.compare-row-label{width:150px;background:#0f172a;color:#cbd5e1}
+.compare-hof-title{display:block;font-size:1rem;font-weight:900;color:#f8fafc}
+.compare-title{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.compare-remove-button{font-size:.74rem;font-weight:800;color:#fecaca;background:transparent;border:0;cursor:pointer;margin-top:.2rem}
+.compare-remove-button:hover{color:#f87171}
+.compare-value{font-weight:700;color:#d6e8ff;text-align:left}
+.compare-better-value{color:#86efac;font-weight:900;background:rgba(16,185,129,.14)}
+.compare-best-badge{display:inline-block;padding:.2rem .45rem;border-radius:.75rem;background:#10b981;color:#052e16;font-size:.74rem;font-weight:900;margin-left:.4rem}
+.compare-rank-badge{display:inline-block;padding:.2rem .45rem;border-radius:.75rem;background:#334155;color:#e2e8f0;font-size:.74rem;font-weight:800;margin-left:.4rem}
+.compare-hof-head-best{background:#0f5132;color:#bbf7d0}
+.compare-hof-head-best .compare-hof-title{color:#bbf7d0}
+.compare-hof-head-best .compare-remove-button{color:#bbf7d0}
+.compare-logic-value{font-size:.82rem;color:#cbd5e1;background:rgba(250,204,21,.06);font-weight:700}@media(max-width:767px){
   #app-topnav{box-shadow:0 8px 25px rgba(2,6,23,.18);}
   #app-topnav .nav-inner{min-height:54px;}
   #app-topnav .site-brand{min-width:0;overflow:hidden}

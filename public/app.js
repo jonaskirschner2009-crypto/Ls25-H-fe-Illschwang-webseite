@@ -549,7 +549,7 @@
             if (hofFinder.areaMax !== '' && Number(hofFinder.areaMax) < caps.areaCap) add('areaMax',`bis ${hofFinder.areaMax} ha`);
             if (hofFinder.type) add('type',hofFinder.type); if (hofFinder.animal) add('animal',hofFinder.animal); if (hofFinder.equipment) add('equipment',`🔎 ${hofFinder.equipment}`);
             if (hofFinder.sort !== 'default') add('sort',document.getElementById('finder-sort')?.selectedOptions[0]?.textContent || 'Sortierung');
-            if (hofFinder.freeOnly) add('freeOnly','🏷️ Nur zu verkaufen'); if (hofFinder.favoritesOnly) add('favoritesOnly','★ Nur Favoriten');
+            if (hofFinder.freeOnly) add('freeOnly','🏷️ Nur zu verkaufen'); if (hofFinder.favoritesOnly) add('favoritesOnly','♥ Nur Favoriten');
             const chipBox=document.getElementById('finder-active-filters'); if(chipBox) chipBox.innerHTML=chips.length?chips.join(''):'<span class="text-xs text-slate-400">Keine erweiterten Filter aktiv.</span>';
             const free=document.getElementById('finder-free-only'), fav=document.getElementById('finder-favorites-only');
             [ [free,hofFinder.freeOnly], [fav,hofFinder.favoritesOnly] ].forEach(([e,a])=>{if(e){e.classList.toggle('bg-indigo-600',a);e.classList.toggle('text-white',a);}});
@@ -627,7 +627,7 @@
             document.getElementById('hof-day-title').textContent=h.name;
             document.getElementById('hof-day-meta').textContent=`${h.preis} · ${h.groesse} · ${h.schwerpunkt||'Landwirtschaft'}`;
             document.getElementById('hof-day-description').textContent=h.slogan||h.beschreibung||'';
-            const b=document.getElementById('hof-day-favorite'); const fav=favoriteHoefe.includes(h.id); b.textContent=fav?'★ Gemerkt':'☆ Merken';
+            const b=document.getElementById('hof-day-favorite'); const fav=favoriteHoefe.includes(h.id); b.textContent=fav?'♥ Gemerkt':'♡ Merken';
         }
         function openHofDay(){const h=getHofDay();if(h)openModal(h.id);}
         function toggleDayFavorite(){const h=getHofDay();if(!h)return;toggleFavorite({stopPropagation:()=>{}},h.id);renderHofDay();}
@@ -647,8 +647,60 @@
                     : '';
                 return;
             }
-            const rows=[['Status',h=>hofStatus[h.id]==='verkauft'?'🔴 Verkauft':'🟢 Zu verkaufen'],['Preis',h=>h.preis],['Größe',h=>h.groesse],['Schwerpunkt',h=>h.schwerpunkt||'—'],['Tierhaltung',h=>h.tierhaltung||'—'],['Flächen',h=>h.flaechen||'—']];
-            box.innerHTML=`<table class="w-full min-w-[620px] text-sm border-collapse"><thead><tr><th class="text-left p-3 bg-slate-100 dark:bg-slate-800">Merkmal</th>${hs.map(h=>`<th class="text-left p-3 bg-slate-100 dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700"><div class="font-black">${escapeHtmlAttr(h.name)}</div><button onclick="toggleCompare(event,${h.id})" class="text-xs text-red-500 mt-1">Entfernen</button></th>`).join('')}</tr></thead><tbody>${rows.map(([label,fn])=>`<tr class="border-t border-slate-200 dark:border-slate-800"><td class="p-3 font-bold text-slate-500">${label}</td>${hs.map(h=>`<td class="p-3 border-l border-slate-200 dark:border-slate-800 font-semibold">${escapeHtmlAttr(fn(h))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+
+            const prices=hs.map(h=>parseEuroValue(h.preis)).filter(v=>v>0);
+            const areas=hs.map(h=>parseHaValue(h.groesse)).filter(v=>v>0);
+            const minPrice=Math.min(...prices), maxPrice=Math.max(...prices);
+            const minArea=Math.min(...areas), maxArea=Math.max(...areas);
+
+            const requestedType = String(hofFinder.type || '').trim().toLowerCase();
+            const requestedAnimal = String(hofFinder.animal || '').trim().toLowerCase();
+
+            const scoreById=new Map();
+            const compareInfoById=new Map();
+            hs.forEach(h=>{
+                const price=parseEuroValue(h.preis);
+                const area=parseHaValue(h.groesse);
+                const type=getHofFinderType(h);
+                const typeLower = String(type || '').trim().toLowerCase();
+                const animal=(h.tierhaltung||'').trim().toLowerCase();
+
+                const priceSpread = Math.max(1, maxPrice-minPrice);
+                const areaSpread = Math.max(1, maxArea-minArea);
+                const priceScore = 35 * (1 - ((price-minPrice)/priceSpread));
+                const areaScore = 30 * ((area-minArea)/areaSpread);
+
+                // Neutral compare scoring: the requested crop or livestock focus should not
+                // distort the ranking; price and area remain the pure comparison dimensions.
+                const typeScore = 0;
+                const animalScore = 0;
+                const stallScore = 0;
+                const typePenalty = 0;
+
+                let score = Math.round(Math.min(100, Math.max(0, priceScore + areaScore + typeScore + animalScore + stallScore + typePenalty)));
+                if(hofStatus[h.id]==='verkauft') score = Math.max(0, score - 15);
+                scoreById.set(h.id,score);
+
+                const reasons=[];
+                if(price===minPrice) reasons.push('günstigster Preis');
+                else if(price===maxPrice) reasons.push('höchster Preis');
+                else reasons.push(price<maxPrice?'deutlich günstiger Preis':'höherer Preis');
+
+                if(area===maxArea) reasons.push('größte Fläche');
+                else if(area===minArea) reasons.push('kleinste Fläche');
+                else reasons.push(area>minArea?'größere Fläche':'kleinere Fläche');
+
+                if(hofStatus[h.id]==='verkauft') reasons.push('verkauft');
+                if(!reasons.length) reasons.push('allgemeiner Vergleich');
+                compareInfoById.set(h.id,reasons.join(' • '));
+            });
+            const bestScore=Math.max(...hs.map(h=>scoreById.get(h.id)));
+            const bestIds=new Set(hs.filter(h=>scoreById.get(h.id)===bestScore).map(h=>h.id));
+            const rows=[['Status',h=>hofStatus[h.id]==='verkauft'?'🔴 Verkauft':'🟢 Zu verkaufen'],['Preis',h=>h.preis],['Größe',h=>h.groesse],['Schwerpunkt',h=>h.schwerpunkt||'—'],['Tierhaltung',h=>h.tierhaltung||'—'],['Flächen',h=>h.flaechen||'—'],['Gesamtwertung',h=>`${scoreById.get(h.id)}/100${bestIds.has(h.id)?' ⭐ Beste Wahl':''}`],['Vergleichslogik',h=>compareInfoById.get(h.id)||'—']];
+            box.innerHTML=`<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th class="compare-table-label compare-metric-head">Merkmal</th>${hs.map(h=>{
+                const isBest=bestIds.has(h.id);
+                return `<th class="compare-table-label compare-hof-head${isBest?' compare-hof-head-best':''}"><div class="compare-title"><span class="compare-hof-title">${escapeHtmlAttr(h.name)}</span>${isBest?`<span class="compare-best-badge">⭐ Beste Wahl</span>`:`<span class="compare-rank-badge">Rang ${scoreById.get(h.id)}</span>`}</div><button type="button" onclick="toggleCompare(event,${h.id})" class="compare-remove-button">Entfernen</button></th>`;
+            }).join('')}</tr></thead><tbody>${rows.map(([label,fn])=>`<tr><td class="compare-table-label compare-row-label">${label}</td>${hs.map(h=>`<td class="compare-value${bestIds.has(h.id)&&label==='Gesamtwertung'?' compare-better-value':''}${label==='Vergleichslogik'?' compare-logic-value':''}">${escapeHtmlAttr(fn(h))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
         }
 
         function renderHöfe() {
@@ -666,6 +718,16 @@
                 if(finderResult)finderResult.textContent='';
                 if(finderAI)finderAI.innerHTML='';
                 if(finderAnalysis)finderAnalysis.innerHTML='';
+            }
+
+            if (currentAppView === 'favorites' && favoriteHoefe.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 dark:text-slate-400">
+                    <div class="text-4xl mb-3">❤️</div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white">Noch keine gemerkten Höfe</h3>
+                    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Du hast noch keinen Hof mit dem Herzen markiert.</p>
+                    <button type="button" onclick="showAppView('farms')" class="mt-4 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold">🏡 Höfe entdecken</button>
+                </div>`;
+                return;
             }
 
             let gefiltert = hoefeData.filter(hof => {
@@ -713,7 +775,7 @@
                         <div class="hof-card-header-v31 mb-3">
                             <div class="hof-card-title-actions-v31">
                                 <h3 class="font-black text-xl text-slate-900 dark:text-white leading-tight">${hof.name}</h3>
-                                <button type="button" onclick="toggleFavorite(event, ${hof.id})" title="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" aria-label="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" class="favorite-btn ${favoriteHoefe.includes(hof.id)?'favorite-active':''} min-w-10 min-h-10 px-2 text-2xl inline-flex items-center justify-center shrink-0">${favoriteHoefe.includes(hof.id)?'★':'☆'}</button>
+                                <button type="button" onclick="toggleFavorite(event, ${hof.id})" title="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" aria-label="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" class="favorite-btn ${favoriteHoefe.includes(hof.id)?'favorite-active':''} min-w-10 min-h-10 px-2 text-2xl inline-flex items-center justify-center shrink-0">${favoriteHoefe.includes(hof.id)?'♥':'♡'}</button>
                                 <button type="button" onclick="toggleCompare(event, ${hof.id})" title="Hof vergleichen" aria-label="Hof vergleichen" class="px-2 min-w-10 min-h-10 rounded-lg text-lg hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0 ${compareHoefe.includes(hof.id)?'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30':''}">${compareHoefe.includes(hof.id)?'✓':'⚖️'}</button>
                             </div>
                             <div class="hof-card-status-v31">${isAdmin ? `<button onclick="toggleStatus(event, ${hof.id})" class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-sm cursor-pointer whitespace-nowrap ${isVerkauft ? 'badge-verkauft hover:bg-red-700' : 'badge-zu-verkaufen hover:bg-emerald-600'}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</button>` : `<span class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap ${isVerkauft ? 'badge-verkauft' : 'badge-zu-verkaufen'}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</span>`}</div>
@@ -1099,7 +1161,7 @@
             finally{b.disabled=false;b.textContent=userAccountModalMode==='admin'?'Admin anmelden':(userAccountModalMode==='register'?'Konto erstellen':'Anmelden');}
         }
         async function logoutUserAccount(){await window.hofCloudSync.userLogout();currentUserAccount=null;updateUserAccountUI();renderHöfe();showAdminToast('Konto abgemeldet ✓','success');}
-        function updateUserAccountUI(){const l=document.getElementById('user-account-label'),card=document.getElementById('profile-account-card');if(l)l.textContent=adminUserPreview?'👤 Benutzeransicht':(currentUserAccount?'👤 '+currentUserAccount.username:'👤 Anmelden');if(card)card.innerHTML=currentUserAccount?`<b>👤 ${escapeHtmlAttr(currentUserAccount.username)}</b><div id="user-account-application-summary" class="text-xs text-slate-500 mt-1">Merkliste und deine Anträge können geräteübergreifend gespeichert werden.</div><div id="user-account-application-list" class="mt-3 space-y-2"></div><button type="button" onclick="logoutUserAccount()" class="mt-3 px-3 py-2 rounded-xl bg-red-100 text-red-700 text-sm font-bold">Abmelden</button>`:`<b>👤 Freiwilliges Konto</b><div class="text-xs text-slate-500 mt-1">Die Website funktioniert auch ohne Konto. Mit Konto kannst du deine Merkliste und Anträge geräteübergreifend speichern.</div><button type="button" onclick="openUserAccount('register')" class="mt-3 px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm font-bold">Konto erstellen</button>`; if(currentUserAccount)loadUserAccountApplications();}
+        function updateUserAccountUI(){const l=document.getElementById('user-account-label'),card=document.getElementById('profile-account-card');if(l)l.textContent=adminUserPreview?'👤 Benutzeransicht':(currentUserAccount?'👤 '+currentUserAccount.username:'👤 Anmelden');if(card)card.innerHTML=currentUserAccount?`<div class="flex flex-wrap items-center justify-between gap-3"><div><b>👤 ${escapeHtmlAttr(currentUserAccount.username)}</b><div id="user-account-application-summary" class="text-xs text-slate-500 mt-1">Merkliste und deine Anträge können geräteübergreifend gespeichert werden.</div></div></div><div id="user-account-application-list" class="mt-3 space-y-2"></div><button type="button" onclick="logoutUserAccount()" class="mt-3 px-3 py-2 rounded-xl bg-red-100 text-red-700 text-sm font-bold">Abmelden</button>`:`<div class="flex flex-wrap items-center justify-between gap-3"><div><b>👤 Freiwilliges Konto</b><div class="text-xs text-slate-500 mt-1">Die Website funktioniert auch ohne Konto. Mit Konto kannst du deine Merkliste und Anträge geräteübergreifend speichern.</div></div></div><button type="button" onclick="openUserAccount('register')" class="mt-3 px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm font-bold">Konto erstellen</button>`; if(currentUserAccount)loadUserAccountApplications();}
         async function loadUserAccountApplications(){try{const d=await window.hofCloudSync.request('/api/user/applications',{method:'GET'});const list=document.getElementById('user-account-application-list'),summary=document.getElementById('user-account-application-summary');if(!list)return;const apps=d.applications||[];if(summary)summary.textContent=`${favoriteHoefe.length} gemerkte Höfe · ${apps.length} eigene Kaufanträge`;list.innerHTML=apps.length?apps.slice(0,5).map(a=>`<div class="flex justify-between gap-3 p-2 rounded-lg bg-white/70 dark:bg-slate-900/60 border border-emerald-100 dark:border-slate-800 text-xs"><span><b>${escapeHtmlAttr(a.hofName)}</b><br><span class="text-slate-500">${escapeHtmlAttr(a.id)}</span></span><span class="font-bold text-emerald-600">${escapeHtmlAttr(a.status||'Neu')}</span></div>`).join(''): '<div class="text-xs text-slate-500">Noch keine eigenen Kaufanträge.</div>';}catch(e){}}
         async function restoreUserAccountSession(){try{const s=window.hofCloudSync?.getSession?.();if(s?.user){currentUserAccount=s.user;updateUserAccountUI();}else if(s?.token&&!s?.admin){const d=await window.hofCloudSync.userSession();currentUserAccount=d.user;updateUserAccountUI();}}catch(e){currentUserAccount=null;updateUserAccountUI();}}
 
@@ -2033,7 +2095,7 @@
             const btn = document.getElementById('favorites-filter-btn');
             if(!btn) return;
             const count = favoriteHoefe.filter(id => hoefeData.some(h => h.id === id)).length;
-            btn.textContent = `${favoritesOnly ? '★' : '☆'} Favoriten${count ? ` (${count})` : ''}`;
+            btn.textContent = `${favoritesOnly ? '♥' : '♡'} Favoriten${count ? ` (${count})` : ''}`;
             btn.classList.toggle('bg-amber-400', favoritesOnly);
             btn.classList.toggle('text-slate-900', favoritesOnly);
         }
@@ -2287,6 +2349,7 @@
             try { updateThemeButtonUI(); } catch(e){ console.warn('Theme-UI:', e); }
             try { updateAdminMenuUI(); } catch(e){ console.warn('Admin-UI:', e); }
             try { updateFavoritesButton(); } catch(e){ console.warn('Favoriten-UI:', e); }
+            try { updateUserAccountUI(); } catch(e){ console.warn('Account-UI:', e); }
             try { refreshCloudStatus(); } catch(e){}
             renderHöfe();
         }
