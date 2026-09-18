@@ -722,7 +722,7 @@ html:not(.dark) .text-slate-400,html:not(.dark) .text-slate-500{color:#64748b!im
 .hero-cover {
   position: relative;
   isolation: isolate;
-  background: url('grafik.jpg') center 48% / cover no-repeat;
+  background: url('grafik.png') center 48% / cover no-repeat;
   background-color: #0f172a;
   min-height: 620px;
 }
@@ -731,7 +731,7 @@ html:not(.dark) .text-slate-400,html:not(.dark) .text-slate-500{color:#64748b!im
   position: absolute;
   inset: -3%;
   z-index: 0;
-  background: url('grafik.jpg') center 48% / cover no-repeat;
+  background: url('grafik.png') center 48% / cover no-repeat;
   transform: scale(1.02);
   animation: heroZoom 18s ease-in-out infinite alternate;
   transform-origin: center;
@@ -853,50 +853,110 @@ main > .bg-white:first-child {
   object-fit: cover !important;
 }
 
-/* Hero komplett über Ebenen aufgebaut: kein doppelter Hintergrund mehr. */
+/* Hero: finale, saubere Fassung für das Referenzbild */
 .hero-cover {
-  background: none !important;
-  isolation: isolate;
   position: relative;
+  isolation: isolate;
+  background: url('grafik.png') center 52% / cover no-repeat;
+  min-height: 640px;
 }
 .hero-cover::before {
   content: "";
   position: absolute;
   inset: -2.5%;
-  z-index: -3;
-  background: url('grafik.jpg') center 48% / cover no-repeat;
-  transform: scale(1);
+  z-index: 0;
+  background: url('grafik.png') center 52% / cover no-repeat;
+  transform: scale(1.02);
+  animation: heroZoom 22s ease-in-out infinite alternate;
 }
 .hero-cover::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: 1;
   background:
-    linear-gradient(180deg, rgba(2,6,23,.46) 0%, rgba(2,6,23,.10) 42%, rgba(2,6,23,.62) 100%),
-    linear-gradient(90deg, rgba(2,6,23,.14), transparent 50%, rgba(2,6,23,.18));
+    linear-gradient(180deg, rgba(2,6,23,.66) 0%, rgba(2,6,23,.18) 42%, rgba(2,6,23,.78) 100%),
+    linear-gradient(90deg, rgba(2,6,23,.28), transparent 46%, rgba(2,6,23,.20));
   pointer-events: none;
 }
-.hero-cover > .hero-overlay { display: none !important; }
+.hero-cover > .hero-overlay {
+  z-index: 1;
+  background: none !important;
+}
 .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
   animation: heroRiseSoft .9s .12s cubic-bezier(.2,.8,.2,1) both;
 }
 .hero-logo-mark {
+  position: relative;
+  z-index: 2;
+  width: 104px !important;
+  height: 104px !important;
+  border-width: 2px !important;
+  border-color: rgba(134,239,172,.85) !important;
   animation: heroLogoIn .8s .2s cubic-bezier(.2,.8,.2,1) both !important;
   transition: transform .3s ease, box-shadow .3s ease;
 }
 .hero-logo-mark:hover {
   transform: scale(1.035) !important;
 }
-.hero-kicker { animation: heroRiseSoft .7s .28s both; }
-.hero-content h1 { animation: heroRiseSoft .8s .38s both; }
-.hero-content p { animation: heroRiseSoft .8s .50s both; }
-.hero-content p:last-child { animation-delay: .60s; }
-.hero-content > p:last-child { color: #f8fafc !important; background: rgba(2,6,23,.68); border-color: rgba(226,232,240,.28); text-shadow: 0 1px 3px rgba(0,0,0,.75); }
+.hero-kicker {
+  color: #dff9d3 !important;
+  font-size: .72rem !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase;
+  background: rgba(7, 15, 13, 0.38);
+  border: 1px solid rgba(163, 230, 53, 0.35);
+  padding: .45rem .9rem;
+  border-radius: .75rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  animation: heroRiseSoft .7s .28s both;
+}
+.hero-content h1 {
+  font-size: clamp(3.5rem, 9vw, 9rem) !important;
+  line-height: .85 !important;
+  letter-spacing: -.08em !important;
+  font-weight: 950 !important;
+  color: #f8fafc !important;
+  text-shadow: 0 6px 24px rgba(0,0,0,.45);
+  animation: heroRiseSoft .8s .38s both;
+}
+.hero-content p {
+  animation: heroRiseSoft .8s .5s both;
+}
+.hero-content p:last-child { animation-delay: .6s; }
+.hero-content > p:last-child {
+  max-width: 760px;
+  color: #f8fafc !important;
+  background: rgba(2,6,23,.68);
+  border: 1px solid rgba(226,232,240,.28);
+  border-radius: 999px;
+  padding: .7rem 1.2rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,.75);
+}
+.hero-content > p:not(:last-child) {
+  color: #d7f7d7 !important;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .78rem;
+  font-weight: 800;
+}
 
 @keyframes heroKenBurns {
   from { transform: scale(1.015); }
   to { transform: scale(1.07); }
+}
+
+@keyframes heroRiseSoft {
+  from { opacity: 0; transform: translate3d(0,16px,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+
+@keyframes heroLogoIn {
+  from { opacity: 0; transform: scale(.92); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @media (max-width: 767px) {
