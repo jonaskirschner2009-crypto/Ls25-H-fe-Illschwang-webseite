@@ -718,34 +718,46 @@ html:not(.dark) .text-slate-400,html:not(.dark) .text-slate-500{color:#64748b!im
   width: 72%;
 }
 
-/* Hero: echtes grafik.jpg mit sehr langsamem Ken-Burns-Effekt */
+/* Hero: sauberes Hintergrundbild mit klarer Überblendung */
 .hero-cover {
-  background-image: url('grafik.jpg');
-  background-size: cover;
-  background-position: center 48%;
+  position: relative;
   isolation: isolate;
+  background: url('grafik.jpg') center 48% / cover no-repeat;
+  background-color: #0f172a;
+  min-height: 620px;
 }
 .hero-cover::before {
   content: "";
   position: absolute;
   inset: -3%;
-  z-index: -2;
-  background: inherit;
-  background-size: cover;
-  background-position: inherit;
+  z-index: 0;
+  background: url('grafik.jpg') center 48% / cover no-repeat;
+  transform: scale(1.02);
   animation: heroZoom 18s ease-in-out infinite alternate;
   transform-origin: center;
 }
-.hero-cover > .hero-overlay {
-  z-index: -1;
+.hero-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   background:
-    linear-gradient(180deg, rgba(2,6,23,.58) 0%, rgba(2,6,23,.22) 38%, rgba(2,6,23,.72) 100%),
-    linear-gradient(90deg, rgba(2,6,23,.25), transparent 48%, rgba(2,6,23,.28));
+    linear-gradient(180deg, rgba(2,6,23,.62) 0%, rgba(2,6,23,.18) 38%, rgba(2,6,23,.76) 100%),
+    linear-gradient(90deg, rgba(2,6,23,.20), transparent 48%, rgba(2,6,23,.20));
+  pointer-events: none;
+}
+.hero-cover > .hero-overlay {
+  z-index: 1;
+  background: none;
 }
 .hero-content {
+  position: relative;
+  z-index: 2;
   animation: heroRise .9s .12s cubic-bezier(.2,.8,.2,1) both;
 }
 .hero-logo-mark {
+  position: relative;
+  z-index: 2;
   animation: logoFloat 5s ease-in-out 1.1s infinite;
   box-shadow: 0 12px 40px rgba(0,0,0,.42), 0 0 0 1px rgba(132,204,22,.35);
   transition: transform .35s ease, box-shadow .35s ease;
@@ -795,8 +807,6 @@ main > .bg-white:first-child {
 @keyframes logoFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-7px); }
-}
-72% { transform: translateX(120%); }
 }
 
 /* Accessibility: Wer reduzierte Bewegung wünscht, bekommt keine Animationen. */
@@ -902,9 +912,6 @@ main > .bg-white:first-child {
 @keyframes heroLogoIn {
   from { opacity: 0; transform: scale(.92); }
   to { opacity: 1; transform: scale(1); }
-}
-72% { transform: translateX(115%); opacity: .45; }
-  80% { opacity: 0; }
 }
 
 @media (max-width: 767px) {
