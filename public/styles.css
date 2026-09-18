@@ -855,9 +855,7 @@ main > .bg-white:first-child {
   inset: -2.5%;
   z-index: -3;
   background: url('grafik.jpg') center 48% / cover no-repeat;
-  transform: scale(1.015);
-  animation: heroKenBurns 26s ease-in-out infinite alternate;
-  will-change: transform;
+  transform: scale(1);
 }
 .hero-cover::after {
   content: "";
@@ -865,8 +863,8 @@ main > .bg-white:first-child {
   inset: 0;
   z-index: -2;
   background:
-    linear-gradient(180deg, rgba(2,6,23,.56) 0%, rgba(2,6,23,.16) 42%, rgba(2,6,23,.70) 100%),
-    linear-gradient(90deg, rgba(2,6,23,.18), transparent 50%, rgba(2,6,23,.22));
+    linear-gradient(180deg, rgba(2,6,23,.46) 0%, rgba(2,6,23,.10) 42%, rgba(2,6,23,.62) 100%),
+    linear-gradient(90deg, rgba(2,6,23,.14), transparent 50%, rgba(2,6,23,.18));
   pointer-events: none;
 }
 .hero-cover > .hero-overlay { display: none !important; }

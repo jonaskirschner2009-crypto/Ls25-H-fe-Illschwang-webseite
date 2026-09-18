@@ -12,6 +12,15 @@ Für diese Version gilt:
 4. Healthcheck: `/api/health`
 5. Danach kann Cloudflare als DNS/Proxy vor den laufenden Server gesetzt werden.
 
+## Daten dauerhaft speichern
+
+SQLite braucht auf Render einen persistenten Datenträger. Ohne Disk werden `hoefe.db`, Konten, verkaufte Höfe und Einstellungen bei einem neuen Deploy oder einem
+Server-Neustart auf einem flüchtigen Dateisystem angelegt und können verloren gehen.
+
+Die mitgelieferte `render.yaml` verwendet deshalb einen kostenpflichtigen Starter-Webservice mit einer 1-GB-Disk unter `/var/data` und setzt
+`HOF_DB_PATH=/var/data/hoefe.db`. Beim bestehenden Render-Service müssen dieselben Werte unter den Service-Einstellungen eingerichtet werden, oder der Service muss
+über die Blueprint-Datei neu angelegt werden. Eine Render-Disk ist kostenpflichtig; alternativ braucht das Projekt eine externe PostgreSQL-/SQLite-Speicherlösung.
+
 ## Standard-Admin
 
 - Benutzername: `Admin`

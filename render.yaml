@@ -2,7 +2,11 @@ services:
   - type: web
     name: hoefe-der-illschwang
     runtime: docker
-    plan: free
+    plan: starter
+    disk:
+      name: hoefe-daten
+      mountPath: /var/data
+      sizeGB: 1
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -13,3 +17,5 @@ services:
         value: admin123
       - key: HOF_CORS_ORIGIN
         value: "*"
+      - key: HOF_DB_PATH
+        value: /var/data/hoefe.db
