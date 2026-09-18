@@ -789,7 +789,7 @@
                         <div class="hof-card-header-v31 mb-3">
                             <div class="hof-card-title-actions-v31">
                                 <div class="hof-card-name-v32 min-w-0 flex-1">
-                                    ${(()=>{const n=getHofDisplayName(hof.name); return `<div class="hof-card-number-v32">${escapeHtmlAttr(n.number)}</div><h3 class="font-black text-xl text-slate-900 dark:text-white leading-tight">${escapeHtmlAttr(n.title)}</h3>`;})()}
+                                    ${(()=>{const n=getHofDisplayName(hof.name); return `<div class="hof-card-number-v32">${escapeHtmlAttr(n.number)}</div><h3 class="hof-card-title-main">${escapeHtmlAttr(n.title)}</h3>`;})()}
                                 </div>
                                 <button type="button" onclick="toggleFavorite(event, ${hof.id})" title="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" aria-label="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" class="favorite-btn ${favoriteHoefe.includes(hof.id)?'favorite-active':''} min-w-10 min-h-10 px-2 text-2xl inline-flex items-center justify-center shrink-0">${favoriteHoefe.includes(hof.id)?'♥':'♡'}</button>
                                 <button type="button" onclick="toggleCompare(event, ${hof.id})" title="Hof vergleichen" aria-label="Hof vergleichen" class="px-2 min-w-10 min-h-10 rounded-lg text-lg hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0 ${compareHoefe.includes(hof.id)?'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30':''}">${compareHoefe.includes(hof.id)?'✓':'⚖️'}</button>
