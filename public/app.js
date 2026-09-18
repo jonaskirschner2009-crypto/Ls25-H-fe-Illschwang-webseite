@@ -2668,6 +2668,7 @@ function openAdminFromNavigation(){
 (function(){
   const CONFIG_KEY='ls25_cloud_config';
   const TOKEN_KEY='ls25_cloud_session';
+    const PRODUCTION_API_BASE='https://ls25-hoefe-illschwang-webseite.onrender.com';
   const now=()=>new Date().toISOString();
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key)||'') ?? fallback;}catch{return fallback;}};
   const write=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
@@ -2675,9 +2676,7 @@ function openAdminFromNavigation(){
     const cfg=read(CONFIG_KEY,{});
     let base=String(cfg.apiBase||'').replace(/\/$/,'');
     const sameOrigin=(location.protocol==='http:'||location.protocol==='https:');
-    // Produktion: Die Website und API liegen standardmäßig auf derselben Origin.
-    // Nur für eine lokal geöffnete HTML-Datei wird localhost als Dev-Fallback verwendet.
-    if(!base && location.protocol==='file:') base='http://localhost:3000';
+    if(!base) base=location.protocol==='file:'?'http://localhost:3000':PRODUCTION_API_BASE;
     return {apiBase:base,enabled:!!base||sameOrigin,configuredAt:cfg.configuredAt||null,autoOrigin:sameOrigin&&!cfg.apiBase};
   }
   function setApiBase(url){
