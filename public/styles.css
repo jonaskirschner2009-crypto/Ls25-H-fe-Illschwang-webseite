@@ -858,9 +858,9 @@ main > .bg-white:first-child {
   position: relative;
   isolation: isolate;
   background: url('grafik.png') center 52% / cover no-repeat;
-  min-height: 840px;
-  padding-top: 2.25rem;
-  padding-bottom: 3.25rem;
+  min-height: 820px;
+  padding: 1.75rem 1.25rem 2.75rem;
+  overflow: hidden;
 }
 .hero-cover::before {
   content: "";
@@ -877,8 +877,8 @@ main > .bg-white:first-child {
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(2,6,23,.66) 0%, rgba(2,6,23,.18) 42%, rgba(2,6,23,.78) 100%),
-    linear-gradient(90deg, rgba(2,6,23,.28), transparent 46%, rgba(2,6,23,.20));
+    linear-gradient(180deg, rgba(2,6,23,.60) 0%, rgba(2,6,23,.18) 42%, rgba(2,6,23,.76) 100%),
+    linear-gradient(90deg, rgba(2,6,23,.20), transparent 46%, rgba(2,6,23,.20));
   pointer-events: none;
 }
 .hero-cover > .hero-overlay {
@@ -890,12 +890,13 @@ main > .bg-white:first-child {
   z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
+  padding-top: 0.25rem;
   animation: heroRiseSoft .9s .12s cubic-bezier(.2,.8,.2,1) both;
 }
 .hero-topline {
   display: inline-block;
   margin: 0 0 0.25rem;
-  padding: 0.15rem 0.35rem;
+  padding: 0.12rem 0.4rem 0.18rem;
   font-weight: 900;
   font-size: 0.78rem;
   letter-spacing: 0.12em;
@@ -907,16 +908,16 @@ main > .bg-white:first-child {
 }
 .hero-corner-badge {
   position: absolute;
-  top: 0.6rem;
-  right: 0.8rem;
+  top: 0.75rem;
+  right: 0.9rem;
   z-index: 10;
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.45rem 0.75rem 0.55rem 0.8rem;
-  min-width: 128px;
+  padding: 0.45rem 0.8rem 0.55rem 0.8rem;
+  min-width: 130px;
   background: linear-gradient(180deg, rgba(58,89,47,.98), rgba(29,63,34,.98));
-  border-left: 1px solid rgba(255,255,255,.22);
+  border-left: 1px solid rgba(255,255,255,.18);
   border-bottom: 1px solid rgba(255,255,255,.18);
   clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 20%);
   box-shadow: 0 12px 28px rgba(0,0,0,.18);
@@ -967,7 +968,7 @@ main > .bg-white:first-child {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
+  gap: 1.1rem;
   width: min(100%, 1180px);
   margin-top: 0.2rem;
 }
@@ -976,14 +977,14 @@ main > .bg-white:first-child {
   content: "";
   flex: 1 1 0;
   height: 3px;
-  max-width: 180px;
+  max-width: 170px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(134,239,172,0), rgba(134,239,172,.88), rgba(134,239,172,0));
+  background: linear-gradient(90deg, rgba(134,239,172,0), rgba(134,239,172,.92), rgba(134,239,172,0));
 }
 .hero-main-title {
   margin: 0;
-  font-size: clamp(3.5rem, 8vw, 9.2rem) !important;
-  line-height: 0.8 !important;
+  font-size: clamp(3.6rem, 8vw, 9rem) !important;
+  line-height: .82 !important;
   letter-spacing: -0.08em !important;
   font-weight: 900 !important;
   color: #f8fafc !important;
@@ -993,8 +994,8 @@ main > .bg-white:first-child {
 }
 .hero-subline {
   display: inline-block;
-  margin-top: 0.7rem;
-  padding: 0.5rem 1.35rem 0.55rem;
+  margin-top: 0.8rem;
+  padding: 0.52rem 1.3rem 0.58rem;
   font-size: 0.8rem;
   letter-spacing: 0.18em;
   font-weight: 900;
@@ -1011,7 +1012,19 @@ main > .bg-white:first-child {
   display: none !important;
 }
 
+@media (max-width: 900px) {
+  .hero-title-wrap::before,
+  .hero-title-wrap::after {
+    max-width: 80px;
+  }
+}
+
 @media (max-width: 767px) {
+  .hero-cover {
+    min-height: 620px;
+    padding-top: 1.2rem;
+    padding-bottom: 1.8rem;
+  }
   .hero-corner-badge {
     top: 0.5rem;
     right: 0.5rem;
@@ -1028,6 +1041,19 @@ main > .bg-white:first-child {
     width: 27px;
     height: 27px;
     font-size: 1rem;
+  }
+  .hero-title-wrap {
+    gap: 0.55rem;
+  }
+  .hero-title-wrap::before,
+  .hero-title-wrap::after {
+    max-width: 34px;
+  }
+  .hero-subline {
+    letter-spacing: .12em;
+    font-size: .7rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
   }
 }
 
