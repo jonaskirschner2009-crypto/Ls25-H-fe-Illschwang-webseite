@@ -575,6 +575,8 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   font-size: clamp(1.2rem, 2vw, 2.2rem);
   line-height: 1.04;
   letter-spacing: -.04em;
+  display:block;
+  max-width:100%;
 }
 .hof-card-name-v32 {
   min-width:0;
@@ -592,11 +594,12 @@ body.mobile-sidebar-open{overflow:hidden!important;}
 }
 .dark .hof-card-number-v32 { color:#9ad6bc; }
 .hof-card-name-v32 h3 {
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  overflow:hidden;
+  display:block;
+  overflow:visible;
   hyphens:none;
+  white-space:normal;
+  line-height:1.15;
+  max-width:100%;
 }
 .hof-card-status-v31 {
   justify-self:end;
