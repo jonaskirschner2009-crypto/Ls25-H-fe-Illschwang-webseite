@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: hoefe-der-illschwang
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOF_ADMIN_USER
+        value: Admin
+      - key: HOF_ADMIN_PASSWORD
+        value: admin123
+      - key: HOF_CORS_ORIGIN
+        value: "*"

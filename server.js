@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
-const APP_VERSION = 'v81';
+const APP_VERSION = 'v86';
 const ADMIN_USER = String(process.env.HOF_ADMIN_USER || 'Admin').trim() || 'Admin';
 const ADMIN_PASSWORD = String(process.env.HOF_ADMIN_PASSWORD || 'admin123');
 const DB_PATH = process.env.HOF_DB_PATH || path.join(__dirname, 'hoefe.db');
@@ -16,12 +16,15 @@ app.disable('x-powered-by');
 // Dafür erlauben wir nur die Browser-Origins, die für den lokalen Test benötigt werden.
 app.use((req,res,next)=>{
   const origin=req.get('origin')||'';
-  if(!origin || origin==='null' || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')){
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  const allowed=String(process.env.HOF_CORS_ORIGIN||'*').trim();
+  if(allowed==='*'){
+    res.setHeader('Access-Control-Allow-Origin','*');
+  }else if(origin && allowed.split(',').map(x=>x.trim()).includes(origin)){
+    res.setHeader('Access-Control-Allow-Origin',origin);
     res.setHeader('Vary','Origin');
-    res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,OPTIONS');
   }
+  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE,OPTIONS');
   if(req.method==='OPTIONS') return res.sendStatus(204);
   next();
 });
@@ -80,6 +83,14 @@ db.exec(`CREATE TABLE IF NOT EXISTS discord_application_messages (
   channel_id TEXT NOT NULL,
   message_id TEXT NOT NULL,
   updated_at TEXT NOT NULL
+);`);
+
+db.exec(`CREATE TABLE IF NOT EXISTS admin_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  admin_username TEXT NOT NULL,
+  action TEXT NOT NULL,
+  details TEXT NOT NULL,
+  created_at TEXT NOT NULL
 );`);
 
 db.exec(`CREATE TABLE IF NOT EXISTS businesses (
@@ -244,6 +255,46 @@ function readAppState(res){
 app.get('/api/public/state',(_req,res)=>{ res.setHeader('Cache-Control','no-store, no-cache, must-revalidate, proxy-revalidate'); res.setHeader('Pragma','no-cache'); res.setHeader('Expires','0'); readAppState(res); });
 app.get('/api/state',auth,(req,res)=>readAppState(res));
 
+
+// --- Zentrale Hof-Mutationen ---
+app.get('/api/admin/logs',auth,requireAnyRole('admin','editor','sales','viewer'),(_req,res)=>{
+  const logs=db.prepare('SELECT id,admin_username AS username,action,details,created_at AS time FROM admin_logs ORDER BY id DESC LIMIT 200').all();
+  res.json({logs});
+});
+app.post('/api/admin/logs',auth,requireAnyRole('admin','editor','sales'),(req,res)=>{
+  const action=cleanPublicText(req.body?.action,160);
+  const details=cleanPublicText(req.body?.details,1000);
+  if(!action || !details) return res.status(400).json({message:'Aktion und Details sind erforderlich.'});
+  const now=new Date().toISOString();
+  const info=db.prepare('INSERT INTO admin_logs(admin_username,action,details,created_at) VALUES(?,?,?,?)').run(req.admin.username,action,details,now);
+  res.status(201).json({log:{id:info.lastInsertRowid,username:req.admin.username,action,details,time:now}});
+});
+app.delete('/api/admin/logs',auth,requireRole('superadmin'),(_req,res)=>{
+  db.prepare('DELETE FROM admin_logs').run();
+  res.json({ok:true});
+});
+app.put('/api/admin/farms/:id/status',auth,requireAnyRole('admin','editor','sales'),(req,res)=>{
+  const id=Number(req.params.id); const status=String(req.body?.status||'');
+  if(!Number.isFinite(id) || !['zu-verkaufen','verkauft'].includes(status)) return res.status(400).json({message:'Ungültiger Hofstatus.'});
+  const state=readCurrentState(); if(!state || !Array.isArray(state.hoefe)) return res.status(503).json({message:'Hofdaten fehlen.'});
+  const hof=state.hoefe.find(h=>Number(h.id)===id); if(!hof) return res.status(404).json({message:'Hof nicht gefunden.'});
+  state.status=state.status&&typeof state.status==='object'&&!Array.isArray(state.status)?state.status:{};
+  state.kaeufer=state.kaeufer&&typeof state.kaeufer==='object'&&!Array.isArray(state.kaeufer)?state.kaeufer:{};
+  state.status[id]=status;
+  if(status==='verkauft') state.kaeufer[id]=cleanPublicText(req.body?.buyer,180)||'Unbekannt'; else delete state.kaeufer[id];
+  const updatedAt=writeCurrentState(state);
+  res.json({ok:true,updatedAt,hof:{id:hof.id,name:hof.name,status:state.status[id],buyer:state.kaeufer[id]||null}});
+});
+app.put('/api/admin/farms/:id/buyer',auth,requireAnyRole('admin','editor','sales'),(req,res)=>{
+  const id=Number(req.params.id); const buyer=cleanPublicText(req.body?.buyer,180)||'Unbekannt';
+  if(!Number.isFinite(id)) return res.status(400).json({message:'Ungültiger Hof.'});
+  const state=readCurrentState(); if(!state || !Array.isArray(state.hoefe)) return res.status(503).json({message:'Hofdaten fehlen.'});
+  const hof=state.hoefe.find(h=>Number(h.id)===id); if(!hof) return res.status(404).json({message:'Hof nicht gefunden.'});
+  state.kaeufer=state.kaeufer&&typeof state.kaeufer==='object'&&!Array.isArray(state.kaeufer)?state.kaeufer:{};
+  state.kaeufer[id]=buyer;
+  const updatedAt=writeCurrentState(state);
+  res.json({ok:true,updatedAt,hof:{id:hof.id,name:hof.name,buyer}});
+});
 
 // --- Discord-Bot / zentrale Antrag-Statusverwaltung ---
 let discordBotApi = null;
