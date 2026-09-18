@@ -619,12 +619,26 @@
 
         function getHofDay(){
             if(!hoefeData.length)return null;
+            // Der Hof des Tages bleibt pro Kalendertag stabil, bevorzugt aber Höfe,
+            // die aktuell tatsächlich zum Verkauf stehen. So wird nicht versehentlich
+            // ein bereits verkaufter Hof als Tagesangebot präsentiert.
+            const candidates=hoefeData.filter(h=>hofStatus[h.id]!=='verkauft');
+            const pool=candidates.length?candidates:hoefeData;
             const d=new Date(); const key=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
-            return hoefeData[key % hoefeData.length];
+            return pool[key % pool.length];
+        }
+        function getHofDisplayName(name){
+            const raw=String(name||'Hof').trim();
+            const match=raw.match(/^(Hof\s*\d+)\s*[-–—:]\s*(.+)$/i);
+            if(!match)return {number:'',title:raw};
+            return {number:match[1],title:match[2].trim()};
         }
         function renderHofDay(){
             const h=getHofDay(); if(!h)return;
-            document.getElementById('hof-day-title').textContent=h.name;
+            const n=getHofDisplayName(h.name);
+            document.getElementById('hof-day-title').textContent=n.title;
+            const badge=document.getElementById('hof-day-number');
+            if(badge){badge.textContent=n.number||''; badge.classList.toggle('hidden',!n.number);}
             document.getElementById('hof-day-meta').textContent=`${h.preis} · ${h.groesse} · ${h.schwerpunkt||'Landwirtschaft'}`;
             document.getElementById('hof-day-description').textContent=h.slogan||h.beschreibung||'';
             const b=document.getElementById('hof-day-favorite'); const fav=favoriteHoefe.includes(h.id); b.textContent=fav?'♥ Gemerkt':'♡ Merken';
@@ -772,13 +786,16 @@
                 card.onclick = (e) => { if (!e.target.closest('button')) openModal(hof.id); };
                 card.innerHTML = `
                     <div>
-                        <div class="hof-card-header-v31 mb-3">
-                            <div class="hof-card-title-actions-v31">
-                                <h3 class="font-black text-xl text-slate-900 dark:text-white leading-tight">${hof.name}</h3>
-                                <button type="button" onclick="toggleFavorite(event, ${hof.id})" title="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" aria-label="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" class="favorite-btn ${favoriteHoefe.includes(hof.id)?'favorite-active':''} min-w-10 min-h-10 px-2 text-2xl inline-flex items-center justify-center shrink-0">${favoriteHoefe.includes(hof.id)?'♥':'♡'}</button>
-                                <button type="button" onclick="toggleCompare(event, ${hof.id})" title="Hof vergleichen" aria-label="Hof vergleichen" class="px-2 min-w-10 min-h-10 rounded-lg text-lg hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0 ${compareHoefe.includes(hof.id)?'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30':''}">${compareHoefe.includes(hof.id)?'✓':'⚖️'}</button>
+                        <div class="hof-card-header-v32 mb-3">
+                            <div class="hof-card-topline-v32">
+                                <div class="hof-card-number-v32">${(()=>{const n=getHofDisplayName(hof.name); return escapeHtmlAttr(n.number);})()}</div>
+                                <div class="hof-card-actions-v32">
+                                    <button type="button" onclick="toggleFavorite(event, ${hof.id})" title="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" aria-label="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" class="favorite-btn ${favoriteHoefe.includes(hof.id)?'favorite-active':''} min-w-10 min-h-10 px-2 text-2xl inline-flex items-center justify-center shrink-0">${favoriteHoefe.includes(hof.id)?'♥':'♡'}</button>
+                                    <button type="button" onclick="toggleCompare(event, ${hof.id})" title="Hof vergleichen" aria-label="Hof vergleichen" class="px-2 min-w-10 min-h-10 rounded-lg text-lg hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0 ${compareHoefe.includes(hof.id)?'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30':''}">${compareHoefe.includes(hof.id)?'✓':'⚖️'}</button>
+                                </div>
                             </div>
-                            <div class="hof-card-status-v31">${isAdmin ? `<button onclick="toggleStatus(event, ${hof.id})" class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-sm cursor-pointer whitespace-nowrap ${isVerkauft ? 'badge-verkauft hover:bg-red-700' : 'badge-zu-verkaufen hover:bg-emerald-600'}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</button>` : `<span class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap ${isVerkauft ? 'badge-verkauft' : 'badge-zu-verkaufen'}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</span>`}</div>
+                            <div class="hof-card-status-v32">${isAdmin ? `<button onclick="toggleStatus(event, ${hof.id})" class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-sm cursor-pointer whitespace-nowrap ${isVerkauft ? 'badge-verkauft hover:bg-red-700' : 'badge-zu-verkaufen hover:bg-emerald-600'}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</button>` : `<span class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap ${isVerkauft ? 'badge-verkauft' : 'badge-zu-verkaufen'}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</span>`}</div>
+                            <h3 class="hof-card-name-title-v32 font-black text-xl text-slate-900 dark:text-white leading-tight">${(()=>{const n=getHofDisplayName(hof.name); return escapeHtmlAttr(n.title);})()}</h3>
                         </div>
                         <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold italic mb-3">"${hof.slogan}"</p>
                         <div class="flex flex-wrap gap-1.5 mb-3"><span class="px-2 py-1 rounded-full text-[11px] font-bold bg-indigo-100 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300">${getHofFinderType(hof)}</span>${hof.bilder?.length ? `<span class="px-2 py-1 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">📷 ${hof.bilder.length} Bilder</span>` : ''}${hof.tierhaltung && hof.tierhaltung !== 'Keine' ? `<span class="px-2 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300">🐄 ${hof.tierhaltung}</span>` : ''}</div>
@@ -988,7 +1005,7 @@
         /* --- Admin-Modus & Hof-Bearbeitung --- */
         /* --- Eigenes Admin-Menü / Login --- */
         function getCurrentAdmin() { return adminProfiles.find(p=>p.id===currentAdminId)||null; }
-        function addAdminLog(action, details) { const admin=getCurrentAdmin(); adminLogs.unshift({id:Date.now()+Math.random(),username:admin?admin.username:'Unbekannt',action,details,time:new Date().toLocaleString('de-DE')}); adminLogs=adminLogs.slice(0,100); localStorage.setItem('ls25_adminLogs',JSON.stringify(adminLogs)); if(typeof sendToDiscordChannels==='function'){ sendToDiscordChannels('log',{username:'Höfe der Illschwang',embeds:[{title:'📋 Änderungs-Log',description:`**${action}**\n${details}`,footer:{text:admin?admin.username:'Unbekannt'},timestamp:new Date().toISOString()}]}).catch(()=>{}); } }
+        async function addAdminLog(action, details) { const admin=getCurrentAdmin(); const local={id:Date.now()+Math.random(),username:admin?admin.username:'Unbekannt',action,details,time:new Date().toLocaleString('de-DE')}; adminLogs.unshift(local); adminLogs=adminLogs.slice(0,100); try{ if(isAdmin&&window.hofCloudSync?.request) { const r=await window.hofCloudSync.request('/api/admin/logs',{method:'POST',body:JSON.stringify({action,details})}); if(r?.log){ adminLogs[0]={...r.log,time:new Date(r.log.time).toLocaleString('de-DE')}; } } }catch(e){ console.warn('Admin-Log konnte nicht serverseitig gespeichert werden:',e.message); } if(typeof sendToDiscordChannels==='function'){ sendToDiscordChannels('log',{username:'Höfe der Illschwang',embeds:[{title:'📋 Änderungs-Log',description:`**${action}**\n${details}`,footer:{text:admin?admin.username:'Unbekannt'},timestamp:new Date().toISOString()}]}).catch(()=>{}); } }
         function getCurrentRole(){ return adminUserPreview ? (observedRole || 'user') : (getCurrentAdmin()?.role || 'admin'); }
         function can(action){ const role=getCurrentRole(); if(role==='superadmin') return true; if(role==='admin') return ['edit','images','prices','sales','purchase','viewLogs'].includes(action); if(role==='editor') return ['edit','images','prices','viewLogs'].includes(action); if(role==='sales') return ['sales','purchase','viewLogs'].includes(action); return action==='view'; }
         function toggleFavorite(event,id){ event?.stopPropagation?.(); favoriteHoefe= favoriteHoefe.includes(id)?favoriteHoefe.filter(x=>x!==id):[...favoriteHoefe,id]; localStorage.setItem('ls25_favoriteHoefe',JSON.stringify(favoriteHoefe)); syncUserPreferences(); scheduleCloudSync('Favoriten geändert'); renderHöfe(); }
@@ -1217,10 +1234,10 @@
         function resetAdminProfilesToCode(){showAdminToast('Admin-Profile werden jetzt sicher im Backend verwaltet.','info');loadAdminProfilesFromServer().then(renderAdminProfiles).catch(()=>{});}
 
         function openOwnProfile(){if(adminUserPreview)return;closeAdminMenu();const p=getCurrentAdmin();if(!p)return;ownProfileEditing=true;editAdminProfile(p.id);document.getElementById('profile-role').disabled=true;document.getElementById('admin-profiles-modal').classList.remove('hidden');}
-        function openAdminLogs(){closeAdminMenu();renderAdminLogs();document.getElementById('admin-logs-modal').classList.remove('hidden');}
+        async function openAdminLogs(){closeAdminMenu();try{const r=await window.hofCloudSync.request('/api/admin/logs',{method:'GET'});adminLogs=(r.logs||[]).map(l=>({...l,time:new Date(l.time).toLocaleString('de-DE')}));}catch(e){console.warn('Admin-Logs konnten nicht geladen werden:',e.message);}renderAdminLogs();document.getElementById('admin-logs-modal').classList.remove('hidden');}
         function closeAdminLogs(){document.getElementById('admin-logs-modal').classList.add('hidden');}
         function renderAdminLogs(){const list=document.getElementById('admin-log-list');list.innerHTML='';if(!adminLogs.length){list.innerHTML='<div class="text-center py-10 text-slate-500">Noch keine Änderungen protokolliert.</div>';return;}adminLogs.forEach(log=>{const el=document.createElement('div');el.className='admin-log-item';el.innerHTML=`<div class="flex justify-between gap-3"><span class="font-bold">${escapeHtmlAttr(log.action)}</span><span class="text-xs text-slate-400 whitespace-nowrap">${escapeHtmlAttr(log.time)}</span></div><div class="text-sm mt-1">${escapeHtmlAttr(log.details)}</div><div class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">👤 ${escapeHtmlAttr(log.username)}</div>`;list.appendChild(el);});}
-        function clearAdminLogs(){if(!isAdmin)return;adminLogs=[];localStorage.setItem('ls25_adminLogs','[]');renderAdminLogs();}
+        async function clearAdminLogs(){if(!isAdmin||getCurrentRole()!=='superadmin')return;try{await window.hofCloudSync.request('/api/admin/logs',{method:'DELETE'});adminLogs=[];renderAdminLogs();showAdminToast('Änderungs-Log geleert ✓','success');}catch(e){showAdminToast(e.message||'Log konnte nicht geleert werden.','error');}}
 
         function toggleEditMode() {
             if(adminUserPreview){showAdminToast('Die Rollen-Vorschau ist schreibgeschützt.','info');return;}
@@ -1638,47 +1655,45 @@
             }
         });
 
-        function toggleStatus(event, id) {
+        async function toggleStatus(event, id) {
             if(adminUserPreview){event?.stopPropagation?.();showAdminToast('Die Rollen-Vorschau ist schreibgeschützt.','info');return;}
-            event.stopPropagation();
-            if (!can('sales')) return;
+            event?.stopPropagation?.();
+            if(!can('sales')) return;
+            const hof=hoefeData.find(h=>Number(h.id)===Number(id)); if(!hof)return;
             if (hofStatus[id] === 'zu-verkaufen') {
-                openInputModal("Hof verkaufen", "Wähle den Käufer oder erstelle einen neuen:", "", (kaeuferName) => {
-                    if (kaeuferName && kaeuferName.trim() !== "") {
-                        hofKaeufer[id] = kaeuferName.trim();
-                    } else {
-                        hofKaeufer[id] = "Unbekannt";
-                    }
-                    hofStatus[id] = 'verkauft';
-                    localStorage.setItem('ls25_hofStatus', JSON.stringify(hofStatus));
-                    localStorage.setItem('ls25_hofKaeufer', JSON.stringify(hofKaeufer));
-                    scheduleCloudSync('Verkaufsstatus geändert');
-                    addAdminLog('Verkaufsstatus geändert', `${hoefeData.find(h => h.id === id)?.name || 'Hof'} wurde an ${hofKaeufer[id]} verkauft.`);
-                     sendToDiscordChannels('status',{username:'Höfe der Illschwang',embeds:[{title:'🚜 Hof verkauft',description:`**${hoefeData.find(h=>h.id===id)?.name||'Hof'}** wurde verkauft.\nKäufer: ${hofKaeufer[id]}`,timestamp:new Date().toISOString()}]}).catch(()=>{});
-                    renderHöfe();
+                openInputModal("Hof verkaufen", "Wähle den Käufer oder erstelle einen neuen:", "", async (kaeuferName) => {
+                    const buyer=(kaeuferName&&kaeuferName.trim())?kaeuferName.trim():"Unbekannt";
+                    try{
+                        const result=await window.hofCloudSync.request('/api/admin/farms/'+encodeURIComponent(id)+'/status',{method:'PUT',body:JSON.stringify({status:'verkauft',buyer})});
+                        hofStatus[id]='verkauft'; hofKaeufer[id]=buyer;
+                        await addAdminLog('Verkaufsstatus geändert',`${hof.name} wurde an ${buyer} verkauft.`);
+                        sendToDiscordChannels('status',{username:'Höfe der Illschwang',embeds:[{title:'🚜 Hof verkauft',description:`**${hof.name}** wurde verkauft.\nKäufer: ${buyer}`,timestamp:new Date().toISOString()}]}).catch(()=>{});
+                        renderHöfe(); showAdminToast('Hof als verkauft gespeichert ✓','success');
+                    }catch(e){showAdminToast('Verkaufsstatus konnte nicht gespeichert werden: '+e.message,'error');}
                 });
             } else {
-                hofStatus[id] = 'zu-verkaufen';
-                delete hofKaeufer[id];
-                localStorage.setItem('ls25_hofStatus', JSON.stringify(hofStatus));
-                localStorage.setItem('ls25_hofKaeufer', JSON.stringify(hofKaeufer));
-                scheduleCloudSync('Verkaufsstatus geändert');
-                addAdminLog('Verkaufsstatus geändert', `${hoefeData.find(h => h.id === id)?.name || 'Hof'} ist wieder zu verkaufen.`);
-                 sendToDiscordChannels('status',{username:'Höfe der Illschwang',embeds:[{title:'🔄 Hof wieder verfügbar',description:`**${hoefeData.find(h=>h.id===id)?.name||'Hof'}** ist wieder zu verkaufen.`,timestamp:new Date().toISOString()}]}).catch(()=>{});
-                renderHöfe();
+                try{
+                    await window.hofCloudSync.request('/api/admin/farms/'+encodeURIComponent(id)+'/status',{method:'PUT',body:JSON.stringify({status:'zu-verkaufen'})});
+                    hofStatus[id]='zu-verkaufen'; delete hofKaeufer[id];
+                    await addAdminLog('Verkaufsstatus geändert',`${hof.name} ist wieder zu verkaufen.`);
+                    sendToDiscordChannels('status',{username:'Höfe der Illschwang',embeds:[{title:'🔄 Hof wieder verfügbar',description:`**${hof.name}** ist wieder zu verkaufen.`,timestamp:new Date().toISOString()}]}).catch(()=>{});
+                    renderHöfe(); showAdminToast('Hof wieder verfügbar ✓','success');
+                }catch(e){showAdminToast('Verkaufsstatus konnte nicht gespeichert werden: '+e.message,'error');}
             }
         }
 
         function editKaeuferFromModal() {
             if (!can('sales') || !aktuellerModalHofId) return;
             const currentVal = hofKaeufer[aktuellerModalHofId] || "";
-            openInputModal("Käufer bearbeiten", "Neuen Käufer aus der Liste wählen oder eintragen:", currentVal, (neuerKaeufer) => {
+            openInputModal("Käufer bearbeiten", "Neuen Käufer aus der Liste wählen oder eintragen:", currentVal, async (neuerKaeufer) => {
                 if (neuerKaeufer !== null) {
-                    hofKaeufer[aktuellerModalHofId] = neuerKaeufer.trim() !== "" ? neuerKaeufer.trim() : "Unbekannt";
-                    localStorage.setItem('ls25_hofKaeufer', JSON.stringify(hofKaeufer));
-                    addAdminLog('Käufer geändert', `${hoefeData.find(h => h.id === aktuellerModalHofId)?.name || 'Hof'}: Käufer auf ${hofKaeufer[aktuellerModalHofId]} gesetzt.`);
-                    renderHöfe();
-                    openModal(aktuellerModalHofId);
+                    const buyer=neuerKaeufer.trim()!==""?neuerKaeufer.trim():"Unbekannt";
+                    try{
+                        await window.hofCloudSync.request('/api/admin/farms/'+encodeURIComponent(aktuellerModalHofId)+'/buyer',{method:'PUT',body:JSON.stringify({buyer})});
+                        hofKaeufer[aktuellerModalHofId]=buyer;
+                        await addAdminLog('Käufer geändert', `${hoefeData.find(h => h.id === aktuellerModalHofId)?.name || 'Hof'}: Käufer auf ${buyer} gesetzt.`);
+                        renderHöfe(); openModal(aktuellerModalHofId); showAdminToast('Käufer gespeichert ✓','success');
+                    }catch(e){showAdminToast('Käufer konnte nicht gespeichert werden: '+e.message,'error');}
                 }
             });
         }
@@ -2115,8 +2130,7 @@
                             const connected=await ensureCloudAuthentication({silent:true, reason});
                             if(!connected) return;
                         }
-                        await window.hofCloudSync.push();
-                        showAdminToast('Änderung automatisch synchronisiert ✓','success');
+                        showAdminToast('Änderung wird direkt im Backend gespeichert ✓','success');
                         return;
                     }catch(e){
                         lastError=e;
@@ -2142,11 +2156,6 @@
                     discordSettings=JSON.parse(JSON.stringify(state.discord.settings||discordSettings));
                 }
             }
-            localStorage.setItem('ls25_hofStatus',JSON.stringify(hofStatus));
-            localStorage.setItem('ls25_hofKaeufer',JSON.stringify(hofKaeufer));
-            localStorage.setItem('ls25_favoriteHoefe',JSON.stringify(favoriteHoefe));
-            localStorage.setItem('ls25_compareHoefe',JSON.stringify(compareHoefe));
-            localStorage.setItem('ls25_kaufantraege',JSON.stringify(purchaseApplications));
             return true;
         }
         async function loadCloudStateAfterLogin(){
@@ -2165,7 +2174,7 @@
             cloudAuthModalOpen=true;
             const cfg=window.hofCloudSync?.getConfig?.()||{};
             const current=getCurrentAdmin?.();
-            document.getElementById('cloud-auth-api').value=cfg.apiBase||location.origin;
+            document.getElementById('cloud-auth-api').value=cfg.apiBase||(location.protocol==='file:'?'http://localhost:3000':location.origin);
             document.getElementById('cloud-auth-user').value=current?.username||window.hofCloudAdminIdentity?.username||'';
             document.getElementById('cloud-auth-password').value='';
             document.getElementById('cloud-auth-error').classList.add('hidden');
@@ -2666,11 +2675,11 @@ function openAdminFromNavigation(){
   function getConfig(){
     const cfg=read(CONFIG_KEY,{});
     let base=String(cfg.apiBase||'').replace(/\/$/,'');
-    // Auch eine lokal geöffnete HTML-Datei soll den lokalen Server finden.
-    // Bei http(s) bleibt die aktuelle Origin die bevorzugte Adresse.
-    if(!base && location.protocol==='file:') base='http://localhost:3000';
     const sameOrigin=(location.protocol==='http:'||location.protocol==='https:');
-    return {apiBase:base,enabled:!!base||sameOrigin,configuredAt:cfg.configuredAt||null};
+    // Produktion: Die Website und API liegen standardmäßig auf derselben Origin.
+    // Nur für eine lokal geöffnete HTML-Datei wird localhost als Dev-Fallback verwendet.
+    if(!base && location.protocol==='file:') base='http://localhost:3000';
+    return {apiBase:base,enabled:!!base||sameOrigin,configuredAt:cfg.configuredAt||null,autoOrigin:sameOrigin&&!cfg.apiBase};
   }
   function setApiBase(url){
     const clean=String(url||'').trim().replace(/\/$/,'');

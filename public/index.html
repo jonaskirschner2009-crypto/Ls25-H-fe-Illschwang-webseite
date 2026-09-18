@@ -134,7 +134,8 @@
                     <div class="text-4xl shrink-0">⭐</div>
                     <div class="min-w-0">
                         <div class="text-xs uppercase tracking-wider font-black text-emerald-600 dark:text-emerald-400">Hof des Tages</div>
-                        <h2 id="hof-day-title" class="text-2xl font-black mt-1 break-words">—</h2>
+                        <div id="hof-day-number" class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1">—</div>
+                        <h2 id="hof-day-title" class="text-2xl font-black mt-0 break-words">—</h2>
                         <p id="hof-day-meta" class="text-sm text-slate-600 dark:text-slate-300 mt-1">—</p>
                         <p id="hof-day-description" class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">—</p>
                     </div>
@@ -622,15 +623,15 @@
         <div class="flex justify-between items-start mb-5">
           <div>
             <div class="text-xs uppercase tracking-wider font-bold text-emerald-600">Cloud-Synchronisation</div>
-            <h3 id="cloud-auth-title" class="text-xl font-black mt-1">☁️ Backend verbinden</h3>
-            <p id="cloud-auth-hint" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Die Website versucht zuerst automatisch deinen aktuell angemeldeten Admin zu verwenden.</p>
+            <h3 id="cloud-auth-title" class="text-xl font-black mt-1">☁️ Backend-Verbindung</h3>
+            <p id="cloud-auth-hint" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Die Website verwendet im normalen Betrieb automatisch das Backend derselben Adresse. Nur bei einer lokalen Entwicklerkopie ist eine manuelle Backend-Adresse nötig.</p>
           </div>
           <button type="button" onclick="closeCloudAuthModal()" class="p-2">✕</button>
         </div>
         <form id="cloud-auth-form" onsubmit="submitCloudAuth(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Backend-Adresse</label>
-            <input id="cloud-auth-api" type="url" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="http://localhost:3000">
+            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1.5">Backend-Adresse <span class="font-normal opacity-70">(nur Entwickler/Notfall)</span></label>
+            <input id="cloud-auth-api" type="url" class="w-full px-3.5 py-3 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:border-emerald-500" placeholder="automatisch: aktuelle Website-Adresse">
           </div>
           <div id="cloud-auth-credentials" class="space-y-3">
             <div>

@@ -540,7 +540,11 @@ body.mobile-sidebar-open{overflow:hidden!important;}
 #hoefe-grid > .hof-card-v31 { min-width: 0; width: 100%; overflow: hidden; }
 .hof-card-header-v31 { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; gap:.75rem; min-width:0; }
 .hof-card-title-actions-v31 { display:flex; align-items:flex-start; gap:.35rem; min-width:0; }
-.hof-card-title-actions-v31 h3 { min-width:0; overflow-wrap:anywhere; word-break:break-word; }
+.hof-card-title-actions-v31 h3 { min-width:0; overflow-wrap:break-word; word-break:normal; hyphens:none; white-space:normal; }
+.hof-card-name-v32 { min-width:0; padding-top:.05rem; }
+.hof-card-number-v32 { font-size:.72rem; line-height:1.1; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:#64748b; margin-bottom:.18rem; }
+.dark .hof-card-number-v32 { color:#94a3b8; }
+.hof-card-name-v32 h3 { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; hyphens:none; }
 .hof-card-status-v31 { justify-self:end; flex:none; max-width:100%; }
 @media(max-width:520px){
   .hof-card-header-v31 { grid-template-columns:minmax(0,1fr); gap:.5rem; }
@@ -954,3 +958,13 @@ main > .bg-white:first-child {
 @media (prefers-reduced-motion: reduce) {
   .app-view-enter { animation: none !important; }
 }
+
+
+/* v86: Hofnamen wirklich sauber vom Aktionsbereich trennen */
+.hof-card-header-v32{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:.6rem;row-gap:.25rem;min-width:0;}
+.hof-card-topline-v32{display:flex;align-items:center;gap:.25rem;min-width:0;}
+.hof-card-topline-v32 .hof-card-number-v32{flex:1 1 auto;min-width:0;margin:0;}
+.hof-card-actions-v32{display:flex;align-items:center;gap:.1rem;flex:0 0 auto;}
+.hof-card-status-v32{justify-self:end;grid-column:2;grid-row:1;}
+.hof-card-name-title-v32{grid-column:1 / -1;grid-row:2;min-width:0;margin:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none;}
+@media(max-width:520px){.hof-card-header-v32{grid-template-columns:minmax(0,1fr) auto}.hof-card-status-v32{grid-column:2;grid-row:1}.hof-card-name-title-v32{grid-column:1 / -1;}}
