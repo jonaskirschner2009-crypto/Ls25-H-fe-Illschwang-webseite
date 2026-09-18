@@ -887,8 +887,8 @@ main > .bg-white:first-child {
 .hero-content > p:last-child { color: #f8fafc !important; background: rgba(2,6,23,.68); border-color: rgba(226,232,240,.28); text-shadow: 0 1px 3px rgba(0,0,0,.75); }
 
 @keyframes heroKenBurns {
-  from { transform: scale(1.015) translate3d(0,0,0); }
-  to { transform: scale(1.07) translate3d(-.35%, -.2%, 0); }
+  from { transform: scale(1.015); }
+  to { transform: scale(1.07); }
 }
 
 @media (max-width: 767px) {
