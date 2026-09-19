@@ -560,37 +560,37 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   margin-bottom: .75rem;
 }
 .hof-card-title-actions-v31 {
-  display:flex;
-  align-items:flex-start;
-  gap:.5rem;
-  min-width:0;
+  position: relative;
+  display: block;
 }
 .hof-card-title-actions-v31 h3 {
+  min-height: 4.2rem;
   min-width:0;
   overflow-wrap:break-word;
-  word-break:normal;
-  hyphens:none;
-  white-space:normal;
+  display:block;
   color: #f8fafc !important;
   font-size: clamp(1.1rem, 1.8vw, 2rem);
   line-height: 1.1;
   letter-spacing: -.04em;
-  display:block;
-  max-width:100%;
+  overflow-wrap:normal;
+  word-break:normal;
   margin: 0;
 }
 .hof-card-title-main {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
+  font-size: clamp(1rem, 1.55vw, 1.35rem);
+  line-height: 1.12;
   -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  max-width: calc(100% - 9.5rem);
   text-overflow: ellipsis;
   color: #f8fafc !important;
   font-weight: 900;
   font-size: clamp(1.1rem, 1.8vw, 2rem);
   line-height: 1.08;
-  letter-spacing: -.04em;
+  width:100%;
   margin: 0;
   max-width: 100%;
 }
@@ -610,8 +610,10 @@ body.mobile-sidebar-open{overflow:hidden!important;}
 }
 .dark .hof-card-number-v32 { color:#9ad6bc; }
 .hof-card-name-v32 h3 {
-  display:block;
-  overflow:visible;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
   hyphens:none;
   white-space:normal;
   line-height:1.15;
@@ -619,10 +621,19 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   margin: 0;
 }
 .hof-card-status-v31 {
-  justify-self:end;
-  flex:none;
-  max-width:100%;
+  position:absolute;
+  top:0;
+  right:0;
+  max-width:8.2rem;
 }
+.hof-card-title-actions-v31 > .favorite-btn,
+.hof-card-title-actions-v31 > button[onclick*="toggleCompare"] {
+  position:absolute;
+  top:0;
+  width:2.6rem;
+}
+.hof-card-title-actions-v31 > .favorite-btn { right:8.7rem; }
+.hof-card-title-actions-v31 > button[onclick*="toggleCompare"] { right:5.6rem; }
 .hof-card-status-v31 button,
 .hof-card-status-v31 span {
   display: inline-flex;
@@ -693,8 +704,13 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   min-height: 100%;
 }
 @media(max-width:520px){
-  .hof-card-header-v31 { grid-template-columns:minmax(0,1fr); gap:.5rem; }
-  .hof-card-status-v31 { justify-self:start; }
+  .hof-card-header-v31 { min-height: 4rem; }
+  .hof-card-title-actions-v31 h3 { max-width: calc(100% - 7.5rem); }
+  .hof-card-status-v31 { max-width: 6.4rem; }
+  .hof-card-status-v31 button,
+  .hof-card-status-v31 span { padding-left:.55rem; padding-right:.55rem; font-size:.58rem; }
+  .hof-card-title-actions-v31 > .favorite-btn { right:6.9rem; }
+  .hof-card-title-actions-v31 > button[onclick*="toggleCompare"] { right:3.8rem; }
   .hof-card-v31 { padding: 1rem; }
 }
 .finder-range-row-v31 { min-width:0; }
