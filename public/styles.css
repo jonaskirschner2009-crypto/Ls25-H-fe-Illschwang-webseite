@@ -570,7 +570,7 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   display:block;
   color: #f8fafc !important;
   font-size: clamp(1.1rem, 1.8vw, 2rem);
-  line-height: 1.1;
+  min-height: 5.8rem;
   letter-spacing: -.04em;
   overflow-wrap:normal;
   word-break:normal;
@@ -617,12 +617,12 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   hyphens:none;
   white-space:normal;
   line-height:1.15;
-  max-width:calc(100% - 9.5rem);
+  max-width:calc(100% - 6rem);
   margin: 0;
 }
 .hof-card-status-v31 {
   position:absolute;
-  top:0;
+  top:3.35rem;
   right:0;
   max-width:8.2rem;
 }
@@ -704,10 +704,11 @@ body.mobile-sidebar-open{overflow:hidden!important;}
   min-height: 100%;
 }
 @media(max-width:520px){
-  .hof-card-header-v31 { min-height: 4rem; }
+  .hof-card-header-v31 { min-height: 5.4rem; }
   .hof-card-title-actions-v31 h3,
-  .hof-card-name-v32 h3 { max-width: calc(100% - 7.5rem); }
+  .hof-card-name-v32 h3 { max-width: calc(100% - 5.8rem); }
   .hof-card-status-v31 { max-width: 6.4rem; }
+  .hof-card-status-v31 { top: 3.1rem; }
   .hof-card-status-v31 button,
   .hof-card-status-v31 span { padding-left:.55rem; padding-right:.55rem; font-size:.58rem; }
   .hof-card-title-actions-v31 > .favorite-btn { right:6.9rem; }
