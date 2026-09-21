@@ -1,0 +1,1218 @@
+.badge-zu-verkaufen { background-color: #10b981; color: white; }
+        .badge-verkauft { background-color: #dc2626; color: white; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Styles für das benutzerdefinierte Dropdown */
+        .custom-option {
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .custom-option:hover {
+            background-color: rgba(16, 185, 129, 0.15);
+        }
+        .custom-option.selected {
+            background-color: #10b981;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* --- Immobilien-ähnliche Bildergalerie --- */
+        .hof-gallery {
+            display: grid;
+            grid-template-columns: minmax(0, 2.05fr) minmax(150px, 0.95fr);
+            gap: 6px;
+            height: 360px;
+            background: #0f172a;
+        }
+        .hof-gallery-main {
+            position: relative;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+        }
+        .hof-gallery-main img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .hof-gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.55);
+            background: rgba(255,255,255,.78);
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            line-height: 1;
+            box-shadow: 0 6px 18px rgba(0,0,0,.2);
+            cursor: pointer;
+            z-index: 2;
+            transition: transform .15s ease, background .15s ease;
+        }
+        .hof-gallery-arrow:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.04);
+        }
+        .hof-gallery-arrow.prev { left: 14px; }
+        .hof-gallery-arrow.next { right: 14px; }
+        .hof-gallery-counter {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(0,0,0,.72);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .02em;
+            z-index: 2;
+        }
+        .hof-gallery-thumbs {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            background: #0f172a;
+        }
+        .hof-gallery-thumb {
+            position: relative;
+            flex: 0 0 108px;
+            border: 2px solid transparent;
+            padding: 0;
+            overflow: hidden;
+            background: #1e293b;
+            cursor: pointer;
+            opacity: .9;
+        }
+        .hof-gallery-thumb:hover { opacity: 1; }
+        .hof-gallery-thumb.active { border-color: #10b981; opacity: 1; }
+        .hof-gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .hof-gallery-empty {
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            text-align: center;
+            background: #0f172a;
+            color: #94a3b8;
+        }
+
+        /* --- Eigene Admin-Oberfläche statt Browser-Prompts --- */
+        .admin-menu-panel { position: absolute; top: calc(100% + 8px); right: 0; width: 300px; z-index: 100; }
+        .admin-log-item { border-left: 3px solid #10b981; padding-left: 12px; }
+        .price-edit-grid { display: grid; grid-template-columns: 54px minmax(0, 1.5fr) 130px 130px; gap: 8px; align-items: center; }
+        @media (max-width: 640px) {
+            .price-edit-grid { grid-template-columns: 1fr; gap: 8px; }
+            .price-edit-grid > * { grid-column: 1 !important; min-width: 0; }
+            .price-edit-grid input { min-height: 44px; font-size: 16px; }
+            .price-edit-grid button { min-height: 44px; min-width: 44px; }
+        }
+        @media (max-width: 640px) {
+            .hof-gallery {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .hof-gallery-main { height: 230px; }
+            .hof-gallery-thumbs {
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 6px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .hof-gallery-thumb { flex: 0 0 84px; height: 66px; }
+
+            /* Detail-/Bearbeitungsfenster auf Smartphones */
+            #detail-modal {
+                align-items: flex-start;
+                justify-content: flex-start;
+                padding: .5rem;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            #detail-modal > div {
+                width: 100%;
+                max-width: none;
+                max-height: none;
+                height: auto;
+                margin: 0 auto 1rem auto;
+                border-radius: 1rem;
+                overflow: visible;
+                display: block;
+                flex: none;
+            }
+            #detail-modal > div > .p-6:first-of-type {
+                padding: 1rem;
+            }
+            #detail-modal .overflow-y-auto {
+                min-height: auto;
+                max-height: none;
+                overflow: visible;
+                padding: 1rem;
+            }
+            #detail-modal .p-6.border-b {
+                flex-shrink: initial;
+            }
+            #detail-modal .p-4.border-t {
+                flex-wrap: wrap;
+                align-items: stretch;
+                padding: .75rem;
+                flex-shrink: initial;
+                position: static;
+                z-index: auto;
+            }
+            #detail-modal .p-4.border-t > button,
+            #detail-modal .p-4.border-t > div {
+                width: 100%;
+            }
+            #detail-modal .p-4.border-t > div {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+            #detail-modal .p-4.border-t button {
+                min-height: 44px;
+                touch-action: manipulation;
+            }
+            #edit-image-container { margin-top: .75rem; }
+            #drop-zone { padding: 1rem; min-height: 100px; touch-action: manipulation; }
+            #edit-image-manager { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            #edit-image-manager button { min-width: 44px; min-height: 44px; }
+            #edit-gesamtpreis { width: 100%; min-height: 44px; font-size: 16px; }
+            #edit-preise-container .flex.items-center.justify-between { flex-direction: column; align-items: stretch; }
+            #edit-preise-container .flex.items-center.justify-between label { margin-bottom: .25rem; }
+            #edit-title, #edit-slogan, #edit-beschreibung { font-size: 16px; }
+        }
+
+        @media (max-width: 380px) {
+            #detail-modal .p-4.border-t > div { grid-template-columns: 1fr; }
+            #edit-image-manager { grid-template-columns: 1fr; }
+            .hof-gallery-main { height: 200px; }
+        }
+
+        .admin-stat-card{border:1px solid rgba(148,163,184,.25);border-radius:1rem;padding:1rem;background:rgba(255,255,255,.75)}
+        .dark .admin-stat-card{background:rgba(15,23,42,.75)}
+.favorite-active{color:#e11d48!important;background:transparent!important}.favorite-btn{min-width:42px;min-height:42px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:0;font-size:1.45rem;line-height:1;cursor:pointer;touch-action:manipulation;color:#94a3b8;background:transparent}.favorite-btn:hover{background:transparent;color:#e11d48}.favorite-btn:focus-visible{outline:3px solid rgba(16,185,129,.55);outline-offset:2px}
+            /* Exposé-Optik für die Hof-Detailansicht */
+            #modal-quickstats > div { transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+            #modal-quickstats > div:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(15,23,42,.08); }
+            .dark #modal-quickstats > div:hover { box-shadow: 0 8px 20px rgba(0,0,0,.22); }
+            #modal-steckbrief td, #modal-preise td { vertical-align: top; }
+            @media (max-width: 640px) {
+                #modal-quickstats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+                #modal-steckbrief td, #modal-preise td, #modal-steckbrief th, #modal-preise th { padding: .65rem .55rem; font-size: .75rem; }
+            }
+
+
+        /* ==================== MOBILE-FIRST FEINSCHLIFF v20 ==================== */
+        html, body { max-width: 100%; overflow-x: auto; }
+        body { -webkit-text-size-adjust: 100%; }
+        button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+        button, select { touch-action: manipulation; }
+        img { max-width: 100%; }
+
+        /* Ruhige, gut greifbare Scrollbar in beiden Farbschemata. */
+        html { scrollbar-width: thin; scrollbar-color: #64748b #e2e8f0; }
+        html.dark { scrollbar-color: #64748b #0f172a; }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #64748b; border: 3px solid #e2e8f0; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        html.dark ::-webkit-scrollbar-track { background: #0f172a; }
+        html.dark ::-webkit-scrollbar-thumb { background: #64748b; border-color: #0f172a; }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Kleine Geräte: keine unnötig großen Abstände und kein horizontales Überlaufen */
+        @media (max-width: 767px) {
+            header { padding-top: 5.5rem !important; padding-bottom: 2.75rem !important; }
+            header .w-32 { width: 6.5rem !important; height: 6.5rem !important; margin-bottom: 1rem !important; }
+            header h1 { font-size: 2rem !important; line-height: 1.05 !important; }
+            header p { max-width: calc(100vw - 2rem) !important; }
+
+            main { padding-left: .75rem !important; padding-right: .75rem !important; padding-top: 1rem !important; }
+
+            /* Filterleiste */
+            main > .mb-8:first-child { align-items: stretch !important; padding: .75rem !important; gap: .75rem !important; }
+            main > .mb-8:first-child > div:first-child {
+                width: 100%; justify-content: stretch; display: grid !important; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .4rem !important;
+            }
+            main > .mb-8:first-child > div:first-child > span { grid-column: 1 / -1; }
+            main > .mb-8:first-child > div:first-child button { width: 100%; min-height: 44px; padding-left: .35rem !important; padding-right: .35rem !important; font-size: .78rem !important; }
+            main > .mb-8:first-child > div:nth-child(2) { width: 100% !important; display: grid !important; grid-template-columns: 1fr 1fr; gap: .5rem !important; }
+            main > .mb-8:first-child > div:nth-child(2) .relative { grid-column: 1 / -1; }
+            main > .mb-8:first-child > div:nth-child(2) input,
+            main > .mb-8:first-child > div:nth-child(2) button { width: 100% !important; min-height: 44px; }
+            main > .mb-8:first-child > div:nth-child(3) { display: none !important; }
+
+            /* Finder */
+            #hof-finder-panel { padding: .8rem !important; margin-bottom: 1rem !important; }
+            #hof-finder-panel h2 { font-size: 1.1rem !important; }
+            #hof-finder-panel .grid { gap: .7rem !important; }
+            #hof-finder-panel .p-4 { padding: .75rem !important; }
+            #hof-finder-panel select, #hof-finder-panel input[type="search"] { min-height: 44px; font-size: 16px; }
+            #hof-finder-panel input[type="range"] { min-height: 32px; }
+            #hof-finder-panel .flex.flex-wrap.gap-2 button { min-height: 42px; }
+
+            /* Hof-Karten */
+            #hoefe-grid { gap: .8rem !important; }
+            #hoefe-grid > * { min-width: 0; }
+            #hoefe-grid h3 { font-size: 1.05rem !important; }
+            #hoefe-grid .favorite-btn { min-width: 44px !important; width: 44px !important; height: 44px !important; }
+
+            /* Alle Dialoge nutzen auf Handys fast die komplette Breite */
+            [id$="-modal"] { padding: .5rem !important; align-items: flex-start !important; overflow-y: auto !important; }
+            [id$="-modal"] > div {
+                width: 100% !important;
+                max-width: none !important;
+                max-height: calc(100dvh - 1rem) !important;
+                margin: 0 !important;
+                border-radius: 1rem !important;
+            }
+            [id$="-modal"] .p-6 { padding: 1rem !important; }
+            [id$="-modal"] h2, [id$="-modal"] h3 { overflow-wrap: anywhere; }
+            [id$="-modal"] input, [id$="-modal"] select, [id$="-modal"] textarea { font-size: 16px !important; }
+
+            /* Detailansicht: echtes App-Gefühl */
+            #detail-modal { padding: 0 !important; }
+            #detail-modal > div { max-height: 100dvh !important; min-height: 100dvh; border-radius: 0 !important; }
+            #detail-modal > div > .p-6:first-of-type { padding: .9rem !important; }
+            #detail-modal > div > .p-6:first-of-type > div:first-child { padding-right: 2.6rem; }
+            #detail-modal > div > .p-6:first-of-type > button { position: absolute; top: .7rem; right: .7rem; margin: 0 !important; z-index: 10; background: rgba(148,163,184,.12); min-width: 44px; min-height: 44px; }
+            #detail-modal .overflow-y-auto { padding: .9rem !important; }
+            #detail-modal .hof-gallery { border-radius: .75rem; overflow: hidden; }
+            #detail-modal .p-4.border-t { padding: .65rem !important; }
+            #detail-modal .p-4.border-t > div { gap: .5rem !important; }
+            #detail-modal .p-4.border-t button { min-height: 46px !important; }
+            #modal-title, #edit-title { line-height: 1.15; }
+            #modal-slogan { padding-right: .25rem; }
+
+            /* Tabellen werden nicht gequetscht, sondern dürfen horizontal scrollen */
+            #modal-steckbrief, #modal-preise { overflow-x: auto; display: block; width: 100%; }
+            #modal-steckbrief table, #modal-preise table { min-width: 430px; }
+
+            /* Galerie auf schmalen Displays */
+            .hof-gallery-main { height: min(58vw, 270px) !important; min-height: 190px; }
+            .hof-gallery-thumb { flex-basis: 76px !important; height: 58px !important; }
+            .hof-gallery-arrow { width: 40px; height: 40px; font-size: 21px; }
+            .hof-gallery-arrow.prev { left: 8px; }
+            .hof-gallery-arrow.next { right: 8px; }
+            .hof-gallery-counter { right: 8px; bottom: 8px; }
+
+            /* Profil-/Adminfenster */
+            .admin-menu-panel { position: fixed !important; top: 4.2rem !important; right: .5rem !important; left: .5rem !important; width: auto !important; max-height: calc(100dvh - 5rem); overflow-y: auto; }
+            #admin-login-modal .flex.justify-end,
+            #admin-profiles-modal .flex.justify-end,
+            #admin-logs-modal .flex.justify-end,
+            #discord-channels-modal .flex.justify-end { flex-direction: column-reverse; }
+            #admin-login-modal .flex.justify-end button,
+            #admin-profiles-modal .flex.justify-end button,
+            #admin-logs-modal .flex.justify-end button,
+            #discord-channels-modal .flex.justify-end button { width: 100%; min-height: 44px; }
+
+            /* Wizard / Formulare */
+
+            /* Toast und Floating Buttons */
+            .fixed.top-5.right-5 { top: .75rem !important; right: .75rem !important; left: .75rem !important; max-width: none !important; }
+            .fixed.bottom-5.right-5 { right: .75rem !important; bottom: .75rem !important; left: .75rem !important; text-align: center; }
+        }
+
+        @media (max-width: 420px) {
+            header h1 { font-size: 1.75rem !important; }
+            header .tracking-widest { letter-spacing: .08em !important; }
+            main > .mb-8:first-child > div:first-child { grid-template-columns: 1fr 1fr 1fr; }
+            main > .mb-8:first-child > div:first-child button { font-size: .72rem !important; }
+            main > .mb-8:first-child > div:nth-child(2) { grid-template-columns: 1fr; }
+            main > .mb-8:first-child > div:nth-child(2) .relative { grid-column: auto; }
+            #modal-quickstats { grid-template-columns: 1fr 1fr !important; gap: .45rem !important; }
+            #modal-quickstats > div { padding: .65rem !important; min-width: 0; }
+            #modal-quickstats > div > div:last-child { overflow-wrap: anywhere; }
+            #edit-image-manager { grid-template-columns: 1fr 1fr !important; }
+        }
+
+        @media (max-width: 340px) {
+            main > .mb-8:first-child > div:first-child button { font-size: .68rem !important; }
+            #modal-quickstats { grid-template-columns: 1fr !important; }
+            #edit-image-manager { grid-template-columns: 1fr !important; }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            main { padding-left: 1rem !important; padding-right: 1rem !important; }
+            #hoefe-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+        }
+
+        /* iPhone/Android: sichere Innenabstände bei Geräten mit Home-Indikator */
+        @supports (padding: max(0px)) {
+            @media (max-width: 767px) {
+                body { padding-bottom: env(safe-area-inset-bottom); }
+                #detail-modal > div > .p-4.border-t { padding-bottom: max(.65rem, env(safe-area-inset-bottom)) !important; }
+            }
+        }
+
+
+        /* ==================== DETAIL-SCROLL FIX v23 ==================== */
+        /* Die komplette Detailansicht ist eine einzige scrollbare Fläche.
+           Der Inhalt darf nicht in einem zweiten inneren Scrollbereich landen. */
+        #detail-modal {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            align-items: flex-start;
+        }
+        #detail-modal > div {
+            height: auto !important;
+            max-height: none !important;
+            min-height: 0 !important;
+            overflow: visible !important;
+            display: block !important;
+            flex: none !important;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        #detail-modal > div > .overflow-y-auto {
+            min-height: 0 !important;
+            max-height: none !important;
+            overflow: visible !important;
+            -webkit-overflow-scrolling: auto;
+            touch-action: auto;
+        }
+        #detail-modal > div > .p-6.border-b,
+        #detail-modal > div > .p-4.border-t {
+            flex: none !important;
+        }
+        @media (max-width: 767px) {
+            #detail-modal {
+                padding: 0 !important;
+                align-items: flex-start !important;
+                justify-content: flex-start !important;
+            }
+            #detail-modal > div {
+                width: 100% !important;
+                max-width: none !important;
+                min-height: 0 !important;
+                height: auto !important;
+                max-height: none !important;
+                margin: 0 0 1rem 0 !important;
+                border-radius: 0 !important;
+            }
+            #detail-modal > div > .overflow-y-auto {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+        }
+
+/* Interaktive Hofkarte */
+
+/* === V25 PREMIUM FEATURES === */
+.compare-bar{position:sticky;bottom:1rem;z-index:30;backdrop-filter:blur(16px);background:rgba(15,23,42,.92);border:1px solid rgba(148,163,184,.25);box-shadow:0 20px 50px rgba(2,6,23,.3)}
+.compare-check{accent-color:#10b981}
+.day-card{background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(59,130,246,.10));border:1px solid rgba(16,185,129,.28)}
+.dark .day-card{background:linear-gradient(135deg,rgba(16,185,129,.14),rgba(59,130,246,.12))}
+.day-card-layout > *{min-width:0}
+.day-card-actions{align-items:center}
+.status-track{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.status-step{min-width:0;text-align:center}.status-dot{width:30px;height:30px;border-radius:999px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;background:#e2e8f0;color:#64748b}.dark .status-dot{background:#334155;color:#94a3b8}.status-step.done .status-dot{background:#10b981;color:white}.status-step.current .status-dot{box-shadow:0 0 0 4px rgba(16,185,129,.15)}
+@media(max-width:767px){
+ .day-card-layout{display:grid!important;grid-template-columns:minmax(0,1fr);gap:1rem!important}
+ .day-card-layout > div:first-child{min-width:0;width:100%}
+ .day-card-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.5rem!important}
+ .day-card-actions > button{width:100%;min-width:0;min-height:44px;white-space:normal}
+ .mobile-action-grid{display:grid!important;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
+ .mobile-action-grid>*{width:100%!important;justify-content:center}
+ .day-card{border-radius:1rem}
+ .compare-bar{bottom:.5rem;margin-left:-.25rem;margin-right:-.25rem}
+ .status-track{grid-template-columns:1fr}.status-step{display:grid;grid-template-columns:30px 1fr;text-align:left;align-items:center;gap:8px}.status-dot{margin:0}
+}
+
+/* v27: Admin-Menü wird außerhalb des Header-Clippings positioniert und bleibt vollständig erreichbar. */
+#admin-menu-container { position: relative !important; z-index: 1000 !important; }
+#admin-menu-panel {
+  position: fixed !important;
+  top: auto;
+  right: 16px;
+  width: min(320px, calc(100vw - 32px));
+  max-height: min(75vh, 620px);
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  z-index: 2147483000 !important;
+  overscroll-behavior: contain;
+}
+#admin-menu-panel { pointer-events: auto !important; }
+#admin-menu-panel button, #admin-logout-action { min-height: 42px; position: relative; z-index: 2; pointer-events: auto !important; }
+header.hero-cover:has(#admin-menu-panel:not(.hidden)) { z-index: 1000 !important; }
+@media (max-width: 767px) {
+  #admin-menu-panel {
+    right: 8px;
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 90px);
+  }
+}
+
+/* v28: App-Navigation */
+#app-topnav{position:sticky;top:0;z-index:40;background:rgba(15,23,42,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(148,163,184,.18)}
+#app-topnav .site-brand{display:flex;align-items:center;gap:.65rem;margin-right:.55rem;padding:.25rem .55rem .25rem .15rem;border:0;background:transparent;color:#f8fafc;font-weight:900;white-space:nowrap;cursor:pointer;border-radius:.75rem;transition:.18s}
+#app-topnav .site-brand:hover{background:rgba(148,163,184,.12)}
+#app-topnav .site-brand img{width:38px;height:38px;border-radius:999px;object-fit:cover;border:1px solid rgba(110,231,183,.5);box-shadow:0 2px 10px rgba(0,0,0,.25)}
+#app-topnav .nav-inner{max-width:72rem;margin:auto;padding:.65rem 1rem;display:flex;align-items:center;gap:.45rem;overflow-x:auto}
+.app-nav-btn{border:1px solid transparent;border-radius:.7rem;padding:.55rem .75rem;font-size:.78rem;font-weight:700;white-space:nowrap;transition:.18s;cursor:pointer}
+.app-nav-btn:hover{background:rgba(148,163,184,.14)}
+.app-nav-btn.active{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.38);color:#6ee7b7}
+#mobile-menu{position:fixed;inset:0;z-index:100;pointer-events:none}
+#mobile-menu.open{pointer-events:auto}
+#mobile-menu-backdrop{position:absolute;inset:0;background:rgba(2,6,23,.68);opacity:0;transition:.2s}
+#mobile-menu.open #mobile-menu-backdrop{opacity:1}
+#mobile-sidebar{position:absolute;top:0;bottom:0;left:0;width:min(86vw,340px);transform:translateX(-102%);transition:transform .24s ease;background:#0f172a;color:#e2e8f0;box-shadow:20px 0 50px rgba(0,0,0,.35);padding:1rem;overflow-y:auto}
+#mobile-menu.open #mobile-sidebar{transform:translateX(0)}
+.mobile-nav-btn{width:100%;display:flex;align-items:center;gap:.75rem;padding:.78rem .8rem;border-radius:.75rem;text-align:left;font-weight:700;margin:.2rem 0;color:#cbd5e1;background:transparent;border:0;cursor:pointer}
+.mobile-nav-btn:hover,.mobile-nav-btn.active{background:rgba(16,185,129,.15);color:#6ee7b7}
+.mobile-nav-divider{height:1px;background:rgba(148,163,184,.16);margin:.8rem 0}
+#mobile-menu-toggle{display:none}
+#view-profile.hidden{display:none}
+@media(max-width:767px){
+  #app-topnav{position:sticky;top:0}
+  #app-topnav .nav-inner{padding:.55rem .75rem}
+  #app-topnav .desktop-nav{display:none}
+  #mobile-menu-toggle{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:.75rem;border:1px solid rgba(148,163,184,.25);background:rgba(30,41,59,.8);font-size:1.25rem;cursor:pointer;flex:none}
+  #app-topnav .site-brand{margin-right:auto;min-width:0}
+  #app-topnav .site-brand img{width:34px;height:34px}
+  #app-topnav .site-brand span{overflow:hidden;text-overflow:ellipsis}
+}
+@media(min-width:768px){#app-topnav #mobile-menu-toggle{display:none}}
+
+/* v30: stabilere App-Navigation und mobile Bedienung */
+#app-topnav{position:sticky!important;top:0!important;z-index:60!important;}
+#app-topnav .nav-inner{scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+#app-topnav .nav-inner::-webkit-scrollbar{display:none;}
+#mobile-menu{z-index:200!important;}
+#mobile-sidebar{padding-top:max(1rem,env(safe-area-inset-top));padding-bottom:max(1rem,env(safe-area-inset-bottom));}
+body.mobile-sidebar-open{overflow:hidden!important;}
+.app-nav-btn,.mobile-nav-btn{touch-action:manipulation;-webkit-user-select:none;user-select:none;}.compare-table-wrap{width:100%;overflow-x:auto;border:1px solid rgba(148,163,184,.14);border-radius:1rem;background:rgba(15,23,42,.45);scrollbar-width:none;-ms-overflow-style:none;padding-left:1rem;padding-right:1rem;box-sizing:border-box}
+.compare-table-wrap::-webkit-scrollbar{display:none}.compare-table{width:100%;min-width:820px;border-collapse:collapse;color:#e5eef7;font-size:.95rem}
+.compare-table th{background:#0f172a;color:#e2e8f0;letter-spacing:.02em}
+.compare-table td,.compare-table th{padding:.95rem 1rem;border-bottom:1px solid rgba(148,163,184,.22);border-right:1px solid rgba(148,163,184,.14)}
+.compare-table tr:last-child td{border-bottom:0}
+.compare-table tr:nth-child(even) td{background:rgba(30,41,59,.4)}
+.compare-table-label{font-weight:800;text-align:left;white-space:nowrap;color:#cbd5e1}
+.compare-metric-head{width:150px;background:#111827;color:#f8fafc}
+.compare-hof-head{background:#111827;color:#e2e8f0}
+.compare-row-label{width:150px;background:#0f172a;color:#cbd5e1}
+.compare-hof-title{display:block;font-size:1rem;font-weight:900;color:#f8fafc}
+.compare-title{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.compare-remove-button{font-size:.74rem;font-weight:800;color:#fecaca;background:transparent;border:0;cursor:pointer;margin-top:.2rem}
+.compare-remove-button:hover{color:#f87171}
+.compare-value{font-weight:700;color:#d6e8ff;text-align:left}
+.compare-better-value{color:#86efac;font-weight:900;background:rgba(16,185,129,.14)}
+.compare-best-badge{display:inline-block;padding:.2rem .45rem;border-radius:.75rem;background:#10b981;color:#052e16;font-size:.74rem;font-weight:900;margin-left:.4rem}
+.compare-rank-badge{display:inline-block;padding:.2rem .45rem;border-radius:.75rem;background:#334155;color:#e2e8f0;font-size:.74rem;font-weight:800;margin-left:.4rem}
+.compare-hof-head-best{background:#0f5132;color:#bbf7d0}
+.compare-hof-head-best .compare-hof-title{color:#bbf7d0}
+.compare-hof-head-best .compare-remove-button{color:#bbf7d0}
+.compare-logic-value{font-size:.82rem;color:#cbd5e1;background:rgba(250,204,21,.06);font-weight:700}@media(max-width:767px){
+  #app-topnav{box-shadow:0 8px 25px rgba(2,6,23,.18);}
+  #app-topnav .nav-inner{min-height:54px;}
+  #app-topnav .site-brand{min-width:0;overflow:hidden}
+  #app-topnav .site-brand span{overflow:hidden;text-overflow:ellipsis}
+}
+
+/* v31: Filter/Finder stabilisieren */
+#hoefe-grid > .hof-card-v31 { min-width: 0; width: 100%; overflow: hidden; }
+
+.hof-card-v31 {
+  background: linear-gradient(180deg, rgba(8,19,32,.98), rgba(10,23,36,.98));
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 1.1rem;
+  box-shadow: 0 18px 38px rgba(2,6,23,.22);
+  padding: 1.15rem 1.15rem 0.9rem;
+  color: #e2e8f0;
+}
+.hof-card-v31:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 42px rgba(2,6,23,.28);
+}
+/* v40: Kartenkopf – Aktionen bleiben sichtbar, getrennt vom Titel und zuverlässig klickbar. */
+.hof-card-header-v31 {
+  display: block;
+  min-width: 0;
+  margin-bottom: .75rem;
+}
+.hof-card-title-actions-v31 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: .75rem;
+  min-width: 0;
+}
+.hof-card-name-v32 { min-width: 0; padding-top: .05rem; }
+.hof-card-number-v32 {
+  font-size: .72rem; line-height: 1.1; font-weight: 800; letter-spacing: .06em;
+  text-transform: uppercase; color: #9ad6bc; margin-bottom: .22rem;
+}
+.dark .hof-card-number-v32 { color: #9ad6bc; }
+.hof-card-title-main {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  min-width: 0; max-width: none; margin: 0; color: #f8fafc !important; font-weight: 900;
+  font-size: clamp(1.15rem, 1.8vw, 1.9rem); line-height: 1.08; letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+.hof-card-actions-v31 {
+  display: flex; align-items: flex-start; gap: .45rem; flex: 0 0 auto;
+  position: relative; z-index: 5;
+}
+.hof-card-actions-v31 button {
+  position: relative !important; inset: auto !important; width: 2.65rem; height: 2.65rem;
+  min-width: 2.65rem; min-height: 2.65rem; display: inline-flex; align-items: center;
+  justify-content: center; border: 1px solid rgba(148,163,184,.24) !important;
+  border-radius: .8rem !important; background: rgba(15,23,42,.72) !important;
+  color: #cbd5e1 !important; font-size: 1.2rem; line-height: 1; cursor: pointer;
+  pointer-events: auto !important; touch-action: manipulation; box-shadow: 0 6px 16px rgba(2,6,23,.16);
+  transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+}
+.hof-card-actions-v31 button:hover {
+  transform: translateY(-1px); background: rgba(30,41,59,.95) !important;
+  border-color: rgba(148,163,184,.42) !important;
+}
+.hof-card-actions-v31 button:focus-visible { outline: 3px solid rgba(16,185,129,.45); outline-offset: 2px; }
+.hof-card-actions-v31 .favorite-btn.favorite-active {
+  background: rgba(244,63,94,.14) !important; border-color: rgba(251,113,133,.42) !important; color: #fda4af !important;
+}
+.hof-card-actions-v31 .hof-compare-action.is-active {
+  background: rgba(16,185,129,.14) !important; border-color: rgba(52,211,153,.42) !important; color: #6ee7b7 !important;
+}
+.hof-card-status-v31 {
+  display: flex; align-items: center; justify-content: flex-start; min-height: 2.7rem;
+  margin-top: .65rem; position: static; max-width: none;
+}
+.hof-card-status-v31 button, .hof-card-status-v31 span {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 2.55rem;
+  padding: .58rem .9rem; border-radius: 999px; font-size: .7rem; font-weight: 900;
+  letter-spacing: .05em; text-transform: uppercase; border: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 10px 22px rgba(16,185,129,.12);
+  cursor: pointer; position: relative; z-index: 4; pointer-events: auto; touch-action: manipulation;
+}
+.badge-zu-verkaufen { background: linear-gradient(180deg, #22c55e, #16a34a); color: #062b1a; border-color: rgba(134,239,172,.5); }
+.badge-verkauft { background: linear-gradient(180deg, #ef4444, #b91c1c); color: #fff; border-color: rgba(254,202,202,.45); }
+.favorite-btn { cursor: pointer; touch-action: manipulation; }
+.hof-card-v31 .text-emerald-600, .hof-card-v31 .dark\\:text-emerald-400 { color: #9ad6bc !important; }
+.hof-card-v31 p, .hof-card-v31 span, .hof-card-v31 div { color: inherit; }
+.hof-card-v31 p { margin: 0; }
+.hof-card-v31 .line-clamp-2 { display: block; overflow: visible; -webkit-line-clamp: initial; -webkit-box-orient: initial; }
+.hof-card-v31 .border-t, .hof-card-v31 .border-b, .hof-card-v31 .dark\\:border-slate-800\\/80 { border-color: rgba(148,163,184,.15) !important; }
+#hoefe-grid .hof-card-v31 { display: flex; flex-direction: column; justify-content: space-between; min-height: 100%; }
+@media(max-width:520px){
+  .hof-card-title-actions-v31 { grid-template-columns: minmax(0,1fr) auto; gap: .55rem; }
+  .hof-card-title-main { font-size: 1.18rem; line-height: 1.08; }
+  .hof-card-actions-v31 { gap: .35rem; }
+  .hof-card-actions-v31 button { width: 2.7rem; height: 2.7rem; min-width: 2.7rem; min-height: 2.7rem; }
+  .hof-card-status-v31 { margin-top: .55rem; }
+  .hof-card-status-v31 button, .hof-card-status-v31 span { padding-left: .7rem; padding-right: .7rem; font-size: .62rem; }
+  .hof-card-v31 { padding: 1rem; }
+}
+
+.finder-range-row-v31 { min-width:0; }
+.finder-range-row-v31 input[type="range"] { width:100%; max-width:100%; }
+
+html:not(.dark) body{background:#f8fafc!important;color:#0f172a!important}
+html:not(.dark) .bg-slate-950{background-color:#fff!important}
+html:not(.dark) .bg-slate-900{background-color:#fff!important}
+html:not(.dark) .bg-slate-800{background-color:#f1f5f9!important}
+html:not(.dark) .bg-slate-800\/60{background-color:rgba(241,245,249,.75)!important}
+html:not(.dark) .bg-slate-100{background-color:#f1f5f9!important}
+html:not(.dark) .bg-slate-50{background-color:#f8fafc!important}
+html:not(.dark) .border-slate-800,html:not(.dark) .border-slate-200{border-color:#e2e8f0!important}
+html:not(.dark) .border-slate-700{border-color:#cbd5e1!important}
+html:not(.dark) .text-slate-100,html:not(.dark) .text-slate-200,html:not(.dark) .text-slate-300{color:#334155!important}
+html:not(.dark) .text-slate-400,html:not(.dark) .text-slate-500{color:#64748b!important}
+.hof-card-header{min-width:0}
+.hof-card-title-wrap{min-width:0;flex:1 1 auto}
+.hof-card-status{flex:0 0 auto;white-space:nowrap}
+.finder-analysis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.finder-analysis-item{border:1px solid #e2e8f0;border-radius:.9rem;padding:.7rem;background:#f8fafc}
+.dark .finder-analysis-item{border-color:#334155;background:rgba(15,23,42,.45)}
+.finder-analysis-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800;color:#64748b}
+.finder-analysis-value{margin-top:.15rem;font-weight:900;font-size:.92rem}
+.finder-ai-box{border:1px solid #c7d2fe;background:linear-gradient(135deg,#eef2ff,#f8fafc);border-radius:1rem;padding:1rem}
+.dark .finder-ai-box{border-color:rgba(67,56,202,.55);background:linear-gradient(135deg,rgba(30,27,75,.7),rgba(15,23,42,.8))}
+.finder-score{font-size:1.65rem;font-weight:950;line-height:1}
+.finder-reason{font-size:.82rem;color:#475569}
+.dark .finder-reason{color:#cbd5e1}
+@media(max-width:640px){.finder-analysis-grid{grid-template-columns:1fr 1fr}.hof-card-header{align-items:flex-start!important}.hof-card-status{font-size:.7rem!important}}
+
+/* v38: Die Kartenansicht bleibt bewusst deaktiviert. Die App konzentriert sich auf Höfe, Finder, Merkliste, Vergleich und Anträge. */
+.app-nav-btn[data-view="map"], .mobile-nav-btn[data-view="map"]{display:none!important}
+
+/* v45: Navigation aufwerten – Logo, Hierarchie, aktive Seite und Mobile Sidebar */
+#app-topnav{
+  background:rgba(7,15,13,.88)!important;
+  border-bottom:1px solid rgba(134,239,172,.16)!important;
+  box-shadow:0 8px 30px rgba(0,0,0,.18);
+}
+#app-topnav .nav-inner{
+  max-width:84rem!important;
+  min-height:66px;
+  padding:.55rem 1rem!important;
+  gap:.55rem!important;
+}
+#app-topnav .site-brand{
+  gap:.7rem!important;
+  margin-right:1rem!important;
+  padding:.2rem .7rem .2rem .2rem!important;
+  border-radius:1rem!important;
+}
+#app-topnav .site-brand:hover{background:rgba(134,239,172,.08)!important}
+#app-topnav .site-brand-logo-wrap{
+  width:46px;height:46px;display:grid;place-items:center;flex:none;
+  border-radius:14px;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(134,239,172,.45);
+  box-shadow:0 4px 18px rgba(0,0,0,.3);
+  overflow:hidden;
+}
+#app-topnav .site-brand img{
+  width:42px!important;height:42px!important;border:0!important;box-shadow:none!important;
+  border-radius:10px!important;object-fit:cover;
+}
+#app-topnav .site-brand-copy{display:flex;flex-direction:column;align-items:flex-start;line-height:1.05;gap:.2rem}
+#app-topnav .site-brand-copy strong{font-size:.98rem;letter-spacing:-.01em;color:#f8fafc}
+#app-topnav .site-brand-copy small{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#86efac}
+#app-topnav .desktop-nav{height:100%;align-items:stretch!important;gap:.2rem!important}
+#app-topnav .app-nav-btn{
+  position:relative;
+  min-height:46px;
+  padding:.55rem .82rem!important;
+  border-radius:.8rem!important;
+  color:#cbd5e1;
+  background:transparent;
+}
+#app-topnav .app-nav-btn:hover{background:rgba(148,163,184,.09)!important;color:#f8fafc}
+#app-topnav .app-nav-btn.active{
+  background:rgba(34,197,94,.12)!important;
+  border-color:rgba(74,222,128,.22)!important;
+  color:#bbf7d0!important;
+}
+#app-topnav .app-nav-btn.active::after{
+  content:"";position:absolute;left:18%;right:18%;bottom:-.55rem;height:3px;
+  border-radius:999px;background:#84cc16;box-shadow:0 0 12px rgba(132,204,22,.45);
+}
+#mobile-menu-toggle{
+  border-color:rgba(134,239,172,.25)!important;
+  background:rgba(22,101,52,.2)!important;
+  color:#dcfce7;
+}
+#mobile-sidebar{
+  width:min(88vw,360px)!important;
+  background:linear-gradient(180deg,#07100d 0%,#0f172a 100%)!important;
+  border-right:1px solid rgba(134,239,172,.15);
+}
+.mobile-sidebar-brand{
+  display:flex;align-items:center;justify-content:space-between;gap:.7rem;
+  padding:.35rem .15rem .85rem;
+  margin-bottom:.35rem;
+  border-bottom:1px solid rgba(148,163,184,.14);
+}
+.mobile-sidebar-brand-main{
+  display:flex;align-items:center;gap:.7rem;min-width:0;
+  background:transparent;border:0;color:#f8fafc;text-align:left;cursor:pointer;
+}
+.mobile-sidebar-brand-main img{
+  width:44px;height:44px;object-fit:cover;border-radius:13px;
+  background:#fff;border:1px solid rgba(134,239,172,.4);
+}
+.mobile-sidebar-brand-main span{display:flex;flex-direction:column;gap:.2rem;min-width:0}
+.mobile-sidebar-brand-main strong{font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mobile-sidebar-brand-main small{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:#86efac;font-weight:800}
+.mobile-sidebar-close{width:40px;height:40px;flex:none;border:1px solid rgba(148,163,184,.2);border-radius:.75rem;background:rgba(30,41,59,.7);color:#cbd5e1;font-size:1.4rem;cursor:pointer}
+.mobile-nav-btn{border:1px solid transparent!important}
+.mobile-nav-btn.active{border-color:rgba(74,222,128,.18)!important;background:rgba(34,197,94,.12)!important;color:#bbf7d0!important}
+@media(max-width:767px){
+  #app-topnav .nav-inner{min-height:60px!important;padding:.45rem .65rem!important}
+  #app-topnav .site-brand{margin-right:0!important;padding-right:.3rem!important}
+  #app-topnav .site-brand-logo-wrap{width:40px;height:40px;border-radius:12px}
+  #app-topnav .site-brand img{width:36px!important;height:36px!important}
+  #app-topnav .site-brand-copy strong{font-size:.86rem}
+  #app-topnav .site-brand-copy small{font-size:.52rem}
+}
+@media(max-width:390px){
+  #app-topnav .site-brand-copy small{display:none}
+  #app-topnav .site-brand-copy strong{max-width:145px;overflow:hidden;text-overflow:ellipsis}
+}
+
+/* ==========================================================
+   v46 – Animations & Hero polish
+   Alle Animationen bleiben bewusst in CSS.
+   ========================================================== */
+:root {
+  --ill-green: #84cc16;
+  --ill-green-soft: rgba(132, 204, 22, .22);
+}
+
+/* Navigation: ruhiges Einblenden beim Seitenaufruf */
+#app-topnav {
+  animation: navDrop .65s cubic-bezier(.2,.75,.25,1) both;
+}
+.site-brand-logo-wrap {
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+}
+.site-brand:hover .site-brand-logo-wrap {
+  transform: translateY(-1px) rotate(-2deg) scale(1.04);
+  box-shadow: 0 8px 24px rgba(0,0,0,.28), 0 0 0 1px rgba(132,204,22,.35);
+}
+.app-nav-btn {
+  position: relative;
+  overflow: hidden;
+}
+.app-nav-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  transform: translateX(-50%);
+  background: var(--ill-green);
+  transition: width .28s ease;
+}
+.app-nav-btn:hover::after,
+.app-nav-btn.active::after {
+  width: 72%;
+}
+
+/* Hero: sauberes Hintergrundbild mit klarer Überblendung */
+.hero-cover {
+  position: relative;
+  isolation: isolate;
+  background: url('grafik.png') center 48% / cover no-repeat;
+  background-color: #0f172a;
+  min-height: 620px;
+}
+.hero-cover::before {
+  content: "";
+  position: absolute;
+  inset: -3%;
+  z-index: 0;
+  background: url('grafik.png') center 48% / cover no-repeat;
+  transform: scale(1.02);
+  animation: heroZoom 18s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+.hero-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(2,6,23,.62) 0%, rgba(2,6,23,.18) 38%, rgba(2,6,23,.76) 100%),
+    linear-gradient(90deg, rgba(2,6,23,.20), transparent 48%, rgba(2,6,23,.20));
+  pointer-events: none;
+}
+.hero-cover > .hero-overlay {
+  z-index: 1;
+  background: none;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  animation: heroRise .9s .12s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-logo-mark {
+  position: relative;
+  z-index: 2;
+  animation: logoFloat 5s ease-in-out 1.1s infinite;
+  box-shadow: 0 12px 40px rgba(0,0,0,.42), 0 0 0 1px rgba(132,204,22,.35);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.hero-logo-mark:hover {
+  transform: scale(1.045) rotate(1deg);
+  box-shadow: 0 18px 50px rgba(0,0,0,.5), 0 0 0 2px rgba(132,204,22,.55);
+}
+.hero-kicker { animation: heroRise .75s .25s both; }
+.hero-content h1 { animation: heroRise .8s .36s both; }
+.hero-content p { animation: heroRise .8s .48s both; }
+.hero-content p:last-child { animation-delay: .58s; }
+
+/* Karten kommen beim Rendern leicht von unten */
+#hof-day-section,
+#hof-grid > *,
+main > .bg-white:first-child {
+  animation: contentRise .55s cubic-bezier(.2,.8,.2,1) both;
+}
+#hof-grid > * { animation-delay: calc(var(--card-index, 0) * 45ms); }
+
+/* Admin-/Theme-Buttons */
+#theme-icon, #admin-menu-button > span:first-child {
+  transition: transform .25s ease;
+}
+#admin-menu-button:hover > span:first-child,
+#theme-icon:hover {
+  transform: rotate(12deg) scale(1.08);
+}
+
+@keyframes navDrop {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.055); }
+}
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes contentRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+/* Accessibility: Wer reduzierte Bewegung wünscht, bekommt keine Animationen. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-cover { background-position: 55% center; }
+  .hero-cover::before { animation-duration: 24s; }
+  .hero-logo-mark { animation-duration: 6s; }
+}
+
+
+/* ==========================================================
+   v47 – saubere Logo-Darstellung + überarbeitete Animationen
+   ========================================================== */
+#app-topnav .site-brand-logo-wrap,
+#app-topnav .site-brand img,
+.mobile-sidebar-brand-main img {
+  background: transparent !important;
+}
+#app-topnav .site-brand-logo-wrap {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  border: 1px solid rgba(134,239,172,.42) !important;
+  box-shadow: 0 5px 18px rgba(0,0,0,.28) !important;
+}
+#app-topnav .site-brand img {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+.mobile-sidebar-brand-main img {
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+/* Hero: finale, saubere Fassung für das Referenzbild */
+.hero-cover {
+  position: relative;
+  isolation: isolate;
+  background: url('grafik.png') center 52% / cover no-repeat;
+  min-height: 820px;
+  padding: 1.75rem 1.25rem 2.75rem;
+  overflow: hidden;
+}
+.hero-cover::before {
+  content: "";
+  position: absolute;
+  inset: -2.5%;
+  z-index: 0;
+  background: url('grafik.png') center 52% / cover no-repeat;
+  transform: scale(1.02);
+  animation: heroZoom 22s ease-in-out infinite alternate;
+}
+.hero-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(2,6,23,.60) 0%, rgba(2,6,23,.18) 42%, rgba(2,6,23,.76) 100%),
+    linear-gradient(90deg, rgba(2,6,23,.20), transparent 46%, rgba(2,6,23,.20));
+  pointer-events: none;
+}
+.hero-cover > .hero-overlay {
+  z-index: 1;
+  background: none !important;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 0.25rem;
+  animation: heroRiseSoft .9s .12s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-topline {
+  display: inline-block;
+  margin: 0 0 0.25rem;
+  padding: 0.12rem 0.4rem 0.18rem;
+  font-weight: 900;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: #f8fafc;
+  text-transform: uppercase;
+  background: rgba(7,15,13,.32);
+  border: 1px solid rgba(255,255,255,.38);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+.hero-corner-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.9rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.8rem 0.55rem 0.8rem;
+  min-width: 130px;
+  background: linear-gradient(180deg, rgba(58,89,47,.98), rgba(29,63,34,.98));
+  border-left: 1px solid rgba(255,255,255,.18);
+  border-bottom: 1px solid rgba(255,255,255,.18);
+  clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 20%);
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+}
+.hero-corner-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.hero-corner-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #f8fafc;
+  line-height: 0.9;
+}
+.hero-corner-copy span {
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+.hero-corner-copy small {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+.hero-logo-mark {
+  position: relative;
+  z-index: 2;
+  width: 118px !important;
+  height: 118px !important;
+  margin-bottom: 0.5rem !important;
+  border-width: 2px !important;
+  border-color: rgba(134,239,172,.85) !important;
+  animation: heroLogoIn .8s .2s cubic-bezier(.2,.8,.2,1) both !important;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.hero-logo-mark:hover {
+  transform: scale(1.035) !important;
+}
+.hero-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  width: min(100%, 1180px);
+  margin-top: 0.2rem;
+}
+.hero-title-wrap::before,
+.hero-title-wrap::after {
+  content: "";
+  flex: 1 1 0;
+  height: 3px;
+  max-width: 170px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(134,239,172,0), rgba(134,239,172,.92), rgba(134,239,172,0));
+}
+.hero-main-title {
+  margin: 0;
+  font-size: clamp(3.6rem, 8vw, 9rem) !important;
+  line-height: .82 !important;
+  letter-spacing: -0.08em !important;
+  font-weight: 900 !important;
+  color: #f8fafc !important;
+  text-transform: uppercase;
+  text-shadow: 0 10px 18px rgba(0,0,0,.26);
+  animation: heroRiseSoft .8s .38s both;
+}
+.hero-subline {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.52rem 1.3rem 0.58rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  font-weight: 900;
+  color: #f8fafc;
+  text-transform: uppercase;
+  background: rgba(17, 94, 89, 0.68);
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  box-shadow: 0 8px 26px rgba(0,0,0,.18);
+  animation: heroRiseSoft .8s .5s both;
+}
+.hero-content > p,
+.hero-kicker {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .hero-title-wrap::before,
+  .hero-title-wrap::after {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-cover {
+    min-height: 620px;
+    padding-top: 1.2rem;
+    padding-bottom: 1.8rem;
+  }
+  .hero-corner-badge {
+    top: 0.5rem;
+    right: 0.5rem;
+    min-width: 96px;
+    padding: 0.35rem 0.5rem 0.4rem 0.55rem;
+  }
+  .hero-corner-copy span {
+    font-size: .9rem;
+  }
+  .hero-corner-copy small {
+    font-size: .45rem;
+  }
+  .hero-corner-icon {
+    width: 27px;
+    height: 27px;
+    font-size: 1rem;
+  }
+  .hero-title-wrap {
+    gap: 0.55rem;
+  }
+  .hero-title-wrap::before,
+  .hero-title-wrap::after {
+    max-width: 34px;
+  }
+  .hero-subline {
+    letter-spacing: .12em;
+    font-size: .7rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+}
+
+@keyframes heroKenBurns {
+  from { transform: scale(1.015); }
+  to { transform: scale(1.07); }
+}
+
+@keyframes heroRiseSoft {
+  from { opacity: 0; transform: translate3d(0,16px,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+
+@keyframes heroLogoIn {
+  from { opacity: 0; transform: scale(.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 767px) {
+  main > #hof-day-section > .day-card-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+@keyframes heroRiseSoft {
+  from { opacity: 0; transform: translate3d(0,16px,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+@keyframes heroLogoIn {
+  from { opacity: 0; transform: scale(.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 767px) {
+  #app-topnav .site-brand-logo-wrap,
+  #app-topnav .site-brand img { width: 40px !important; height: 40px !important; }
+  .hero-cover::before { background-position: 55% center; animation-duration: 32s; }
+}
+
+
+/* v48 – Logo wirklich transparent, ohne weißen Kasten */
+#app-topnav .site-brand-logo-wrap {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+#app-topnav .site-brand img,
+.mobile-sidebar-brand-main img {
+  background: transparent !important;
+  object-fit: contain !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+
+/* Hof-Auswahl im Kaufantrag: optisch passend zu den bestehenden Eingabefeldern */
+.styled-select-wrap{position:relative}
+.styled-select-wrap::after{content:'⌄';position:absolute;right:14px;top:50%;transform:translateY(-52%);font-size:15px;font-weight:900;color:#94a3b8;pointer-events:none}
+.hoefe-select{appearance:none;-webkit-appearance:none;padding-right:2.5rem!important;cursor:pointer;transition:box-shadow .18s ease, border-color .18s ease, transform .18s ease}
+.hoefe-select:hover{border-color:#94a3b8}
+.hoefe-select:focus{box-shadow:0 0 0 3px rgba(16,185,129,.12)}
+.dark .hoefe-select:hover{border-color:#64748b}
+
+/* v75 – performante, dezente UI-Animationen */
+.app-confirm-backdrop { background: rgba(2,6,23,.48); }
+.app-confirm-card { animation: confirmIn .18s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes confirmIn { from { opacity:0; transform:translateY(8px) scale(.98); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+/* v79: eine zentrale Bereichswechsel-Animation – nur beim Wechsel der Ansicht */
+.app-view-enter {
+  animation: appViewEnter .46s cubic-bezier(.22,.8,.2,1) both;
+  transform-origin: 50% 0;
+  will-change: transform, opacity;
+}
+@keyframes appViewEnter {
+  0% { opacity: 0; transform: translateY(18px) scale(.985); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-view-enter { animation: none !important; }
+}
