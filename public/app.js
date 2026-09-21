@@ -653,6 +653,10 @@
             const hs=compareHoefe.map(id=>hoefeData.find(h=>h.id===id)).filter(Boolean);
             const compareViewActive=currentAppView==='compare';
             panel.classList.toggle('hidden',!compareViewActive&&hs.length<2);
+            const count=document.getElementById('compare-count');
+            if(count) count.textContent=`${hs.length}/${compareLimit}`;
+            const scrollHint=document.getElementById('compare-scroll-hint');
+            if(scrollHint) scrollHint.classList.toggle('hidden',hs.length<2);
             const clearButton=document.getElementById('compare-clear-button');
             if(clearButton){clearButton.disabled=hs.length===0;clearButton.classList.toggle('opacity-50',hs.length===0);}
             if(hs.length<2){
@@ -2676,7 +2680,7 @@ function openAdminFromNavigation(){
     const cfg=read(CONFIG_KEY,{});
     let base=String(cfg.apiBase||'').replace(/\/$/,'');
     const sameOrigin=(location.protocol==='http:'||location.protocol==='https:');
-    if(!base) base=location.protocol==='file:'?'http://localhost:3000':PRODUCTION_API_BASE;
+    if(!base) base=sameOrigin?location.origin:'http://localhost:3000';
     return {apiBase:base,enabled:!!base||sameOrigin,configuredAt:cfg.configuredAt||null,autoOrigin:sameOrigin&&!cfg.apiBase};
   }
   function setApiBase(url){

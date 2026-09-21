@@ -348,10 +348,12 @@ function applyApplicationStatusServer(applicationId,status){
   return {ok:true,application:a,oldStatus,updatedAt,soldHof};
 }
 function deleteApplicationServer(applicationId){
-    if(!isFinishedApplication(a)) return {ok:false,status:409,message:'Offene Anträge können nicht gelöscht werden.'};
   const state=readCurrentState();
   if(!state) return {ok:false,status:503,message:'Noch kein gemeinsamer Zustand vorhanden.'};
   state.applications=Array.isArray(state.applications)?state.applications:[];
+  const application=findApplication(state,applicationId);
+  if(!application) return {ok:false,status:404,message:'Antrag nicht gefunden.'};
+  if(!isFinishedApplication(application)) return {ok:false,status:409,message:'Offene Anträge können nicht gelöscht werden.'};
   const before=state.applications.length;
   state.applications=state.applications.filter(a=>String(a.id)!==String(applicationId));
   if(state.applications.length===before) return {ok:false,status:404,message:'Antrag nicht gefunden.'};

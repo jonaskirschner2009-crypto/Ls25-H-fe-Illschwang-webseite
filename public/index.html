@@ -158,10 +158,11 @@
 
         <section id="hof-compare-panel" class="hidden mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-                <div><div class="text-xs uppercase tracking-wider font-bold text-amber-600 dark:text-amber-400">Entscheidungshilfe</div><h2 class="text-2xl font-black mt-1">⚖️ Hofvergleich</h2><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Vergleiche bis zu drei Höfe direkt nebeneinander.</p></div>
+                <div><div class="text-xs uppercase tracking-wider font-bold text-amber-600 dark:text-amber-400">Entscheidungshilfe</div><h2 class="text-2xl font-black mt-1">⚖️ Hofvergleich <span id="compare-count" class="align-middle text-xs font-bold px-2 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-200">0/3</span></h2><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Vergleiche bis zu drei Höfe direkt nebeneinander.</p></div>
                 <button id="compare-clear-button" type="button" onclick="clearHofCompare()" class="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-sm font-semibold">↺ Vergleich leeren</button>
             </div>
             <div id="hof-compare-content" class="overflow-x-auto"></div>
+            <p id="compare-scroll-hint" class="hidden mt-2 text-xs text-slate-500 dark:text-slate-400 sm:hidden">↔ Wische seitlich, um alle Vergleichshöfe zu sehen.</p>
         </section>
 
         <!-- Erweiterter Hof-Finder 2.0 -->
