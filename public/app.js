@@ -2680,7 +2680,10 @@ function openAdminFromNavigation(){
     const cfg=read(CONFIG_KEY,{});
     let base=String(cfg.apiBase||'').replace(/\/$/,'');
     const sameOrigin=(location.protocol==='http:'||location.protocol==='https:');
-    if(!base) base=sameOrigin?location.origin:'http://localhost:3000';
+    if(!base){
+      const isCloudflarePagesHost=sameOrigin && /\.workers\.dev$/i.test(location.hostname);
+      base=isCloudflarePagesHost?PRODUCTION_API_BASE:(sameOrigin?location.origin:'http://localhost:3000');
+    }
     return {apiBase:base,enabled:!!base||sameOrigin,configuredAt:cfg.configuredAt||null,autoOrigin:sameOrigin&&!cfg.apiBase};
   }
   function setApiBase(url){
