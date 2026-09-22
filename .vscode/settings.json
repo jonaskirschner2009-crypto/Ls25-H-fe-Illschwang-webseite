@@ -3,6 +3,10 @@
         "/^node --check /workspaces/Ls25-H-fe-Illschwang-webseite/public/app\\.js && python - <<'PY'\nfrom pathlib import Path\nhtml = Path\\('/workspaces/Ls25-H-fe-Illschwang-webseite/public/index\\.html'\\)\\.read_text\\(encoding='utf-8'\\)\ncss = Path\\('/workspaces/Ls25-H-fe-Illschwang-webseite/public/styles\\.css'\\)\\.read_text\\(encoding='utf-8'\\)\nprint\\('hero_topline', 'hero-topline' in html\\)\nprint\\('hero_main_title', 'hero-main-title' in html\\)\nprint\\('png refs', css\\.count\\('grafik\\.png'\\)\\)\nprint\\('brace_balance', css\\.count\\('\\{'\\) - css\\.count\\('\\}'\\)\\)\nPY$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^pwd ; ls -la ; node -v$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
