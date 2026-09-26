@@ -2488,6 +2488,7 @@ function updateFilterButtonsV31(){
 }
 function showAppView(view){
   const day=document.getElementById('hof-day-section');
+  const quick=document.getElementById('phantom-quick-actions');
   const compare=document.getElementById('hof-compare-panel');
   const finder=document.getElementById('hof-finder-panel');
   const grid=document.getElementById('hoefe-grid');
@@ -2502,7 +2503,7 @@ function showAppView(view){
   // Jede Ansicht bekommt eine eindeutig definierte Sichtbarkeit.
   // Nicht nur Tailwinds .hidden verwenden: display:none wird zusätzlich inline gesetzt,
   // damit kein alter Zustand des Finders oder eine CSS-Regel ihn wieder sichtbar macht.
-    const sections=[day,compare,finder,grid,profile,applications].filter(Boolean);
+    const sections=[quick,day,compare,finder,grid,profile,applications].filter(Boolean);
   sections.forEach(el=>{
     el.classList.add('hidden');
     el.classList.remove('app-view-enter');
@@ -2516,7 +2517,7 @@ function showAppView(view){
   };
 
   if(view==='home'){
-    show(day); show(grid);
+    show(quick); show(day); show(grid);
   } else if(view==='farms'){
     show(grid);
   } else if(view==='finder'){
@@ -2537,7 +2538,7 @@ function showAppView(view){
     updateMotionToggleUI();
   } else {
     currentAppView='home';
-    show(day); show(grid);
+    show(quick); show(day); show(grid);
   }
 
   // Ein Finder darf niemals als geöffneter Zustand in eine andere Ansicht mitgenommen werden.
@@ -2572,7 +2573,7 @@ function showAppView(view){
   document.querySelectorAll('.app-view-enter').forEach(el=>el.classList.remove('app-view-enter'));
   if(isMotionEnabled() && previousView!==currentAppView){
     void document.body.offsetWidth;
-    const visible=[day,compare,finder,grid,profile].filter(el=>el && el.style.display!=='none');
+    const visible=[quick,day,compare,finder,grid,profile,applications].filter(el=>el && el.style.display!=='none');
     visible.forEach(el=>el.classList.add('app-view-enter'));
     document.body.classList.add('view-transitioning');
     viewTransitionTimer=setTimeout(()=>{

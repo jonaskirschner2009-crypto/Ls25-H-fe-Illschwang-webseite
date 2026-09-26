@@ -136,6 +136,66 @@
     <!-- Hauptcontainer -->
     <main class="max-w-6xl mx-auto px-4 py-8">
 
+        <!-- Phantom-inspirierte Schnellnavigation: bildstark, klar und direkt handlungsorientiert -->
+        <section id="phantom-quick-actions" class="phantom-section mb-8" aria-labelledby="quick-actions-title">
+            <div class="phantom-section-heading">
+                <div>
+                    <div class="phantom-eyebrow">DEIN ILLSCHWANG</div>
+                    <h2 id="quick-actions-title">Alles Wichtige auf einen Blick</h2>
+                </div>
+                <p>Von der Hofübersicht bis zum persönlichen Vergleich – die wichtigsten Bereiche sind direkt erreichbar.</p>
+            </div>
+
+            <div class="phantom-action-grid">
+                <button type="button" class="phantom-action-tile phantom-action-feature" onclick="showAppView('farms')">
+                    <span class="phantom-action-image" aria-hidden="true"></span>
+                    <span class="phantom-action-overlay"></span>
+                    <span class="phantom-action-content">
+                        <span class="phantom-action-kicker">HOFKATALOG</span>
+                        <strong>Die Höfe entdecken</strong>
+                        <span>Alle Betriebe, Preise und wichtigsten Eckdaten in einer übersichtlichen Sammlung.</span>
+                        <span class="phantom-action-link">Höfe öffnen&nbsp; →</span>
+                    </span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-green" onclick="showAppView('finder')">
+                    <span class="phantom-action-icon" aria-hidden="true">🔎</span>
+                    <span class="phantom-action-content">
+                        <span class="phantom-action-kicker">FINDER</span>
+                        <strong>Passenden Hof finden</strong>
+                        <span>Preis, Größe, Tierhaltung und weitere Kriterien kombinieren.</span>
+                    </span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-olive" onclick="openHofDay()">
+                    <span class="phantom-action-icon" aria-hidden="true">⭐</span>
+                    <span class="phantom-action-content">
+                        <span class="phantom-action-kicker">HEUTE IM FOKUS</span>
+                        <strong>Hof des Tages</strong>
+                        <span>Ein ausgewählter Betrieb – mit einem Klick direkt ins Exposé.</span>
+                    </span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-dark" onclick="showAppView('favorites')">
+                    <span class="phantom-action-icon" aria-hidden="true">♥</span>
+                    <span class="phantom-action-content">
+                        <span class="phantom-action-kicker">MERKLISTE</span>
+                        <strong>Gespeicherte Höfe</strong>
+                        <span>Deine Favoriten gesammelt an einem Ort.</span>
+                    </span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-slate" onclick="showAppView('compare')">
+                    <span class="phantom-action-icon" aria-hidden="true">⚖️</span>
+                    <span class="phantom-action-content">
+                        <span class="phantom-action-kicker">VERGLEICH</span>
+                        <strong>Höfe direkt vergleichen</strong>
+                        <span>Bis zu drei Betriebe nebeneinander gegenüberstellen.</span>
+                    </span>
+                </button>
+            </div>
+        </section>
+
         <!-- Hof des Tages + Vergleich -->
         <section id="hof-day-section" class="day-card rounded-2xl p-5 mb-8">
             <div class="day-card-layout flex flex-col lg:flex-row lg:items-center justify-between gap-4">

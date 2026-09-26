@@ -1295,3 +1295,208 @@ main > .bg-white:first-child {
 @media (prefers-reduced-motion: reduce) {
   .app-view-enter { animation: none !important; }
 }
+
+
+/* ================================================================
+   Phantom-inspired UI layer
+   Übernimmt die starken Ideen von HTML5 UP Phantom, ohne das
+   Template zu kopieren: visuelles Raster, Bild-Overlay, Reveal-
+   Animationen, klare Typografie und responsive Stufen.
+   ================================================================ */
+.phantom-section{
+  position:relative;
+}
+.phantom-section-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:2rem;
+  margin:0 0 1.15rem;
+}
+.phantom-section-heading h2{
+  margin:.3rem 0 0;
+  color:#0f172a;
+  font-size:clamp(1.7rem,3vw,2.35rem);
+  line-height:1.06;
+  letter-spacing:-.045em;
+  font-weight:950;
+}
+.dark .phantom-section-heading h2{color:#f8fafc}
+.phantom-section-heading p{
+  max-width:34rem;
+  margin:0;
+  color:#64748b;
+  font-size:.92rem;
+  line-height:1.65;
+}
+.dark .phantom-section-heading p{color:#94a3b8}
+.phantom-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  color:#15803d;
+  font-size:.67rem;
+  font-weight:950;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.dark .phantom-eyebrow{color:#86efac}
+.phantom-eyebrow::before{
+  content:"";
+  display:inline-block;
+  width:2.2rem;
+  height:2px;
+  border-radius:999px;
+  background:currentColor;
+  opacity:.8;
+}
+.phantom-action-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-auto-rows:minmax(190px,1fr);
+  gap:1rem;
+}
+.phantom-action-tile{
+  position:relative;
+  min-height:190px;
+  overflow:hidden;
+  padding:1.45rem;
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:1.15rem;
+  text-align:left;
+  color:#fff;
+  isolation:isolate;
+  cursor:pointer;
+  box-shadow:0 14px 34px rgba(2,6,23,.12);
+  transition:transform .32s ease,box-shadow .32s ease,border-color .32s ease;
+}
+.phantom-action-tile:hover{
+  transform:translateY(-4px);
+  box-shadow:0 22px 50px rgba(2,6,23,.2);
+  border-color:rgba(255,255,255,.24);
+}
+.phantom-action-tile:focus-visible{
+  outline:3px solid rgba(74,222,128,.62);
+  outline-offset:3px;
+}
+.phantom-action-feature{
+  grid-column:span 2;
+  grid-row:span 2;
+  min-height:396px;
+  background:#0a1510;
+}
+.phantom-action-image{
+  position:absolute;
+  inset:0;
+  z-index:-3;
+  background-image:url("grafik.png");
+  background-size:cover;
+  background-position:center 35%;
+  transform:scale(1.01);
+  transition:transform .55s ease;
+}
+.phantom-action-feature:hover .phantom-action-image{transform:scale(1.07)}
+.phantom-action-overlay{
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:linear-gradient(180deg,rgba(3,7,18,.12) 0%,rgba(3,7,18,.42) 42%,rgba(3,7,18,.94) 100%);
+}
+.phantom-action-feature::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(135deg,rgba(34,197,94,.22),transparent 42%);
+  pointer-events:none;
+}
+.phantom-action-green{background:linear-gradient(145deg,#14532d,#166534 58%,#0f2f1f)}
+.phantom-action-olive{background:linear-gradient(145deg,#3f6212,#365314 58%,#1f2f0a)}
+.phantom-action-dark{background:linear-gradient(145deg,#111827,#0f172a 65%,#07100d)}
+.phantom-action-slate{background:linear-gradient(145deg,#1e293b,#172033 60%,#0f172a)}
+.phantom-action-icon{
+  display:grid;
+  place-items:center;
+  width:3rem;
+  height:3rem;
+  margin-bottom:1.6rem;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:.95rem;
+  background:rgba(255,255,255,.09);
+  backdrop-filter:blur(8px);
+  font-size:1.35rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.phantom-action-content{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-end;
+  height:100%;
+  gap:.45rem;
+}
+.phantom-action-content strong{
+  display:block;
+  font-size:clamp(1.2rem,2vw,1.65rem);
+  line-height:1.08;
+  letter-spacing:-.035em;
+  font-weight:950;
+}
+.phantom-action-feature .phantom-action-content strong{font-size:clamp(1.7rem,3vw,2.7rem)}
+.phantom-action-content > span:not(.phantom-action-kicker):not(.phantom-action-link){
+  max-width:38rem;
+  color:rgba(241,245,249,.84);
+  font-size:.83rem;
+  line-height:1.55;
+}
+.phantom-action-kicker{
+  color:#bbf7d0;
+  font-size:.62rem;
+  font-weight:950;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+.phantom-action-feature .phantom-action-kicker{color:#86efac}
+.phantom-action-link{
+  display:inline-flex;
+  align-items:center;
+  margin-top:.3rem;
+  color:#dcfce7;
+  font-size:.75rem;
+  font-weight:900;
+  letter-spacing:.04em;
+  opacity:.94;
+  transition:transform .22s ease;
+}
+.phantom-action-feature:hover .phantom-action-link{transform:translateX(3px)}
+
+/* Phantom-artiges Kartenverhalten auch im Hofkatalog: sanftes Lift statt harter Sprünge. */
+#hoefe-grid .hof-card-v31{
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+#hoefe-grid .hof-card-v31:hover{
+  transform:translateY(-3px);
+  box-shadow:0 22px 46px rgba(2,6,23,.24);
+  border-color:rgba(134,239,172,.28);
+}
+#hoefe-grid .hof-card-v31:focus-within{
+  border-color:rgba(74,222,128,.48);
+  box-shadow:0 0 0 3px rgba(74,222,128,.12),0 18px 38px rgba(2,6,23,.2);
+}
+
+@media(max-width:900px){
+  .phantom-section-heading{align-items:flex-start;flex-direction:column;gap:.55rem}
+  .phantom-action-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(190px,1fr)}
+  .phantom-action-feature{grid-column:span 2;min-height:340px}
+}
+@media(max-width:620px){
+  .phantom-action-grid{grid-template-columns:1fr;grid-auto-rows:auto}
+  .phantom-action-feature{grid-column:auto;min-height:320px}
+  .phantom-action-tile{min-height:210px;padding:1.15rem}
+  .phantom-action-feature .phantom-action-content strong{font-size:1.8rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .phantom-action-tile,.phantom-action-image,#hoefe-grid .hof-card-v31,.phantom-action-link{transition:none!important}
+}
