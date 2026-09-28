@@ -136,7 +136,7 @@
     <!-- Hauptcontainer -->
     <main class="max-w-6xl mx-auto px-4 py-8">
 
-        <!-- Startseite: kompakte Phantom-Kachelwand mit klarer Hierarchie -->
+        <!-- Startseite: bildstarke Übersicht, Phantom-inspiriert ohne unnötige Deko -->
         <section id="phantom-quick-actions" class="phantom-section mb-8" aria-labelledby="quick-actions-title">
             <div class="phantom-section-heading">
                 <div>
@@ -144,46 +144,62 @@
                     <h2 id="quick-actions-title">Alles Wichtige auf einen Blick</h2>
                 </div>
                 <div class="phantom-heading-meta">
-                    <span class="phantom-count-badge">5 Bereiche</span>
-                    <p>Von der Hofübersicht bis zum persönlichen Vergleich – die wichtigsten Bereiche sind direkt erreichbar.</p>
+                    <p>Die wichtigsten Bereiche direkt erreichen – mit echten Landwirtschaftsbildern statt reiner Farbflächen.</p>
                 </div>
             </div>
             <div class="phantom-action-grid">
                 <button type="button" class="phantom-action-tile phantom-action-feature" onclick="showAppView('farms')" aria-label="Alle Höfe entdecken">
-                    <span class="phantom-action-image" aria-hidden="true"></span>
-                    <span class="phantom-action-overlay"></span>
+                    <img class="phantom-tile-image" src="grafik.jpg" alt="Illschwang – Hof und Dorfansicht" loading="eager" onerror="this.onerror=null;this.src='grafik.png'">
+                    <span class="phantom-image-shade"></span>
                     <span class="phantom-feature-frame" aria-hidden="true"></span>
                     <span class="phantom-action-content">
                         <span class="phantom-action-kicker">HOFKATALOG</span>
                         <strong>Die Höfe entdecken</strong>
                         <span class="phantom-action-description">Alle Betriebe, Preise und die wichtigsten Eckdaten in einer übersichtlichen Sammlung.</span>
-                        <span class="phantom-action-link">Höfe öffnen&nbsp; <b>→</b></span>
+                        <span class="phantom-action-link">Höfe öffnen <b>→</b></span>
                     </span>
                 </button>
 
-                <button type="button" class="phantom-action-tile phantom-action-finder" onclick="showAppView('finder')" aria-label="Hof-Finder öffnen">
+                <button type="button" class="phantom-action-tile phantom-image-tile phantom-action-finder" onclick="showAppView('finder')" aria-label="Hof-Finder öffnen">
+                    <img class="phantom-tile-image" src="https://images.pexels.com/photos/33848414/pexels-photo-33848414.jpeg?cs=srgb&dl=pexels-wolfgang-weiser-467045605-33848414.jpg&fm=jpg" alt="Traktor beim Pflügen" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                    <span class="phantom-image-shade"></span>
                     <span class="phantom-action-icon" aria-hidden="true">⌕</span>
-                    <span class="phantom-card-index">01</span>
-                    <span class="phantom-action-content"><span class="phantom-action-kicker">FINDER</span><strong>Passenden Hof finden</strong><span class="phantom-action-reveal">Preis, Größe und Kriterien kombinieren.</span><span class="phantom-card-arrow">↗</span></span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">FINDER</span><strong>Passenden Hof finden</strong><span class="phantom-action-reveal">Preis, Größe, Tierhaltung und Ausstattung kombinieren.</span><span class="phantom-card-arrow">↗</span></span>
                 </button>
 
-                <button type="button" class="phantom-action-tile phantom-action-focus" onclick="openHofDay()" aria-label="Hof des Tages öffnen">
+                <button type="button" class="phantom-action-tile phantom-image-tile phantom-action-focus" onclick="openHofDay()" aria-label="Hof des Tages öffnen">
+                    <img id="quick-action-day-image" class="phantom-tile-image" src="grafik.jpg" alt="Hof des Tages" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                    <span class="phantom-image-shade"></span>
                     <span class="phantom-action-icon" aria-hidden="true">★</span>
-                    <span class="phantom-card-index">02</span>
-                    <span class="phantom-action-content"><span class="phantom-action-kicker">HEUTE IM FOKUS</span><strong>Hof des Tages</strong><span class="phantom-action-reveal">Ein Betrieb bekommt heute die Bühne.</span><span class="phantom-card-arrow">↗</span></span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">HEUTE IM FOKUS</span><strong>Hof des Tages</strong><span class="phantom-action-reveal">Jeden Tag steht ein Betrieb im Mittelpunkt.</span><span class="phantom-card-arrow">↗</span></span>
                 </button>
 
-                <button type="button" class="phantom-action-tile phantom-action-dark" onclick="showAppView('favorites')" aria-label="Gespeicherte Höfe öffnen">
+                <button type="button" class="phantom-action-tile phantom-image-tile phantom-action-dark" onclick="showAppView('favorites')" aria-label="Gespeicherte Höfe öffnen">
+                    <img class="phantom-tile-image" src="https://images.pexels.com/photos/15267097/pexels-photo-15267097.jpeg?cs=srgb&dl=pexels-davidguerrero-15267097.jpg&fm=jpg" alt="Traktor auf einem Hof" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                    <span class="phantom-image-shade"></span>
                     <span class="phantom-action-icon" aria-hidden="true">♥</span>
-                    <span class="phantom-card-index">03</span>
-                    <span class="phantom-action-content"><span class="phantom-action-kicker">MERKLISTE</span><strong>Gespeicherte Höfe</strong><span class="phantom-action-reveal">Deine Favoriten an einem Ort.</span><span class="phantom-card-arrow">↗</span></span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">MERKLISTE</span><strong>Gespeicherte Höfe</strong><span class="phantom-action-reveal">Deine Favoriten übersichtlich an einem Ort.</span><span class="phantom-card-arrow">↗</span></span>
                 </button>
 
-                <button type="button" class="phantom-action-tile phantom-action-slate" onclick="showAppView('compare')" aria-label="Hofvergleich öffnen">
+                <button type="button" class="phantom-action-tile phantom-image-tile phantom-action-slate" onclick="showAppView('compare')" aria-label="Hofvergleich öffnen">
+                    <img class="phantom-tile-image" src="https://images.pexels.com/photos/17729930/pexels-photo-17729930.jpeg?cs=srgb&dl=pexels-wolfgang-weiser-467045605-17729930.jpg&fm=jpg" alt="Traktor und Ballenpresse auf einem Feld" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                    <span class="phantom-image-shade"></span>
                     <span class="phantom-action-icon" aria-hidden="true">⚖</span>
-                    <span class="phantom-card-index">04</span>
-                    <span class="phantom-action-content"><span class="phantom-action-kicker">VERGLEICH</span><strong>Höfe direkt vergleichen</strong><span class="phantom-action-reveal">Bis zu drei Betriebe nebeneinander.</span><span class="phantom-card-arrow">↗</span></span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">VERGLEICH</span><strong>Höfe direkt vergleichen</strong><span class="phantom-action-reveal">Bis zu drei Betriebe mit denselben Merkmalen gegenüberstellen.</span><span class="phantom-card-arrow">↗</span></span>
                 </button>
+            </div>
+        </section>
+
+        <!-- Kontextbild für die erweiterten Bereiche -->
+        <section id="app-context-banner" class="app-context-banner hidden mb-8" aria-live="polite">
+            <div class="app-context-media">
+                <img id="app-context-image" src="grafik.jpg" alt="Landwirtschaftliche Szene" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                <span></span>
+            </div>
+            <div class="app-context-copy">
+                <div id="app-context-kicker" class="phantom-eyebrow">BEREICH</div>
+                <h2 id="app-context-title">—</h2>
+                <p id="app-context-text">—</p>
             </div>
         </section>
 

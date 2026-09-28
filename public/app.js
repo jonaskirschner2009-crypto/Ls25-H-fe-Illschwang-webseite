@@ -641,8 +641,11 @@
             if(badge){badge.textContent=n.number||''; badge.classList.toggle('hidden',!n.number);}
             document.getElementById('hof-day-meta').textContent=`${h.preis} · ${h.groesse} · ${h.schwerpunkt||'Landwirtschaft'}`;
             document.getElementById('hof-day-description').textContent=h.slogan||h.beschreibung||'';
+            const daySrc=(h.bilder&&h.bilder[0])||'grafik.jpg';
             const dayImage=document.getElementById('hof-day-image');
-            if(dayImage){ dayImage.src=(h.bilder&&h.bilder[0])||'grafik.jpg'; dayImage.alt=`${n.title} – Hof des Tages`; }
+            if(dayImage){ dayImage.src=daySrc; dayImage.alt=`${n.title} – Hof des Tages`; }
+            const quickDayImage=document.getElementById('quick-action-day-image');
+            if(quickDayImage){ quickDayImage.src=daySrc; quickDayImage.alt=`${n.title} – Hof des Tages`; quickDayImage.onerror=function(){this.onerror=null;this.src='grafik.jpg';}; }
             const b=document.getElementById('hof-day-favorite'); const fav=favoriteHoefe.includes(h.id); b.textContent=fav?'♥ Gemerkt':'♡ Merken';
         }
         function openHofDay(){const h=getHofDay();if(h)openModal(h.id);}
@@ -2510,12 +2513,12 @@ function updateFilterButtonsV31(){
 function showAppView(view){
   const quick=document.getElementById('phantom-quick-actions');
   const day=document.getElementById('hof-day-section');
-  const quick=document.getElementById('phantom-quick-actions');
   const compare=document.getElementById('hof-compare-panel');
   const finder=document.getElementById('hof-finder-panel');
   const grid=document.getElementById('hoefe-grid');
   const profile=document.getElementById('view-profile');
     const applications=document.getElementById('view-applications');
+  const contextBanner=document.getElementById('app-context-banner');
   if(!grid)return;
   if(view==='map') view='farms';
 
@@ -2525,7 +2528,7 @@ function showAppView(view){
   // Jede Ansicht bekommt eine eindeutig definierte Sichtbarkeit.
   // Nicht nur Tailwinds .hidden verwenden: display:none wird zusätzlich inline gesetzt,
   // damit kein alter Zustand des Finders oder eine CSS-Regel ihn wieder sichtbar macht.
-    const sections=[quick,day,compare,finder,grid,profile,applications].filter(Boolean);
+    const sections=[quick,day,compare,finder,grid,profile,applications,contextBanner].filter(Boolean);
   sections.forEach(el=>{
     el.classList.add('hidden');
     el.classList.remove('app-view-enter');
@@ -2538,29 +2541,48 @@ function showAppView(view){
     el.style.display='';
   };
 
+  const contextCopy={
+    farms:{kicker:'HOFKATALOG',title:'Alle Höfe im Überblick',text:'Betriebe entdecken, Eckdaten prüfen und direkt ins Exposé springen.',image:'https://images.pexels.com/photos/17729930/pexels-photo-17729930.jpeg?cs=srgb&dl=pexels-wolfgang-weiser-467045605-17729930.jpg&fm=jpg'},
+    finder:{kicker:'ERWEITERTE SUCHE',title:'Finde den Hof, der zu dir passt',text:'Preise, Größe, Tierhaltung und Ausstattung kombinieren – ohne durch jeden Hof einzeln zu klicken.',image:'https://images.pexels.com/photos/33848414/pexels-photo-33848414.jpeg?cs=srgb&dl=pexels-wolfgang-weiser-467045605-33848414.jpg&fm=jpg'},
+    favorites:{kicker:'DEINE MERKLISTE',title:'Gespeicherte Höfe',text:'Alles, was du dir später noch einmal ansehen möchtest, bleibt hier an einem Ort.',image:'https://images.pexels.com/photos/15267097/pexels-photo-15267097.jpeg?cs=srgb&dl=pexels-davidguerrero-15267097.jpg&fm=jpg'},
+    compare:{kicker:'ENTSCHEIDUNGSHILFE',title:'Höfe direkt vergleichen',text:'Bis zu drei Betriebe nebeneinanderlegen und Preis, Größe, Schwerpunkt und Tierhaltung vergleichen.',image:'https://images.pexels.com/photos/17729930/pexels-photo-17729930.jpeg?cs=srgb&dl=pexels-wolfgang-weiser-467045605-17729930.jpg&fm=jpg'},
+    applications:{kicker:'ANTRÄGE',title:'Kaufanträge im Blick',text:'Anträge prüfen, Status nachverfolgen und den nächsten Schritt ausführen.',image:'https://images.pexels.com/photos/37409094/pexels-photo-37409094.jpeg?cs=srgb&dl=pexels-florence-mathiot-417781-37409094.jpg&fm=jpg'},
+    profile:{kicker:'MEIN BEREICH',title:'Deine Hofverwaltung',text:'Persönliche Einstellungen, Benachrichtigungen und gespeicherte Entscheidungen.',image:'https://images.pexels.com/photos/15267097/pexels-photo-15267097.jpeg?cs=srgb&dl=pexels-davidguerrero-15267097.jpg&fm=jpg'}
+  };
+  const ctx=contextCopy[view];
   if(view==='home'){
     show(quick); show(day); show(grid);
   } else if(view==='farms'){
-    show(grid);
+    show(contextBanner); show(grid);
   } else if(view==='finder'){
     if(finder){
       finder.dataset.open='true';
       show(finder);
       initFinderRangeInteraction();
     }
-    show(grid);
+    show(contextBanner); show(grid);
   } else if(view==='favorites'){
-    show(grid);
+    show(contextBanner); show(grid);
   } else if(view==='compare'){
-    show(compare);
+    show(contextBanner); show(compare);
   } else if(view==='applications'){
-        show(applications);
+        show(contextBanner); show(applications);
   } else if(view==='profile'){
-    show(profile);
+    show(contextBanner); show(profile);
     updateMotionToggleUI();
   } else {
     currentAppView='home';
-    show(quick); show(day); show(grid);
+    show(day); show(grid);
+  }
+  if(ctx){
+    const image=document.getElementById('app-context-image');
+    const kicker=document.getElementById('app-context-kicker');
+    const title=document.getElementById('app-context-title');
+    const text=document.getElementById('app-context-text');
+    if(image){ image.src=ctx.image; image.onerror=function(){this.onerror=null;this.src='grafik.jpg';}; }
+    if(kicker) kicker.textContent=ctx.kicker;
+    if(title) title.textContent=ctx.title;
+    if(text) text.textContent=ctx.text;
   }
 
   // Ein Finder darf niemals als geöffneter Zustand in eine andere Ansicht mitgenommen werden.
