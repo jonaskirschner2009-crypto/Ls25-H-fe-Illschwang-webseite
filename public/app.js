@@ -2510,6 +2510,7 @@ function updateFilterButtonsV31(){
 function showAppView(view){
   const quick=document.getElementById('phantom-quick-actions');
   const day=document.getElementById('hof-day-section');
+  const quick=document.getElementById('phantom-quick-actions');
   const compare=document.getElementById('hof-compare-panel');
   const finder=document.getElementById('hof-finder-panel');
   const grid=document.getElementById('hoefe-grid');
@@ -2559,7 +2560,7 @@ function showAppView(view){
     updateMotionToggleUI();
   } else {
     currentAppView='home';
-    show(day); show(grid);
+    show(quick); show(day); show(grid);
   }
 
   // Ein Finder darf niemals als geöffneter Zustand in eine andere Ansicht mitgenommen werden.
