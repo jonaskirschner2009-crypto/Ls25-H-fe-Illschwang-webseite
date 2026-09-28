@@ -136,18 +136,70 @@
     <!-- Hauptcontainer -->
     <main class="max-w-6xl mx-auto px-4 py-8">
 
-        <!-- Hof des Tages + Vergleich -->
-        <section id="hof-day-section" class="day-card rounded-2xl p-5 mb-8">
-            <div class="day-card-layout flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div class="flex items-start gap-4 min-w-0">
-                    <div class="text-4xl shrink-0">⭐</div>
-                    <div class="min-w-0">
-                        <div class="text-xs uppercase tracking-wider font-black text-emerald-600 dark:text-emerald-400">Hof des Tages</div>
-                        <div id="hof-day-number" class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1">—</div>
-                        <h2 id="hof-day-title" class="text-2xl font-black mt-0 break-words">—</h2>
-                        <p id="hof-day-meta" class="text-sm text-slate-600 dark:text-slate-300 mt-1">—</p>
-                        <p id="hof-day-description" class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">—</p>
-                    </div>
+        <!-- Startseite: kompakte Phantom-Kachelwand mit klarer Hierarchie -->
+        <section id="phantom-quick-actions" class="phantom-section mb-8" aria-labelledby="quick-actions-title">
+            <div class="phantom-section-heading">
+                <div>
+                    <div class="phantom-eyebrow">DEIN ILLSCHWANG</div>
+                    <h2 id="quick-actions-title">Alles Wichtige auf einen Blick</h2>
+                </div>
+                <div class="phantom-heading-meta">
+                    <span class="phantom-count-badge">5 Bereiche</span>
+                    <p>Von der Hofübersicht bis zum persönlichen Vergleich – die wichtigsten Bereiche sind direkt erreichbar.</p>
+                </div>
+            </div>
+            <div class="phantom-action-grid">
+                <button type="button" class="phantom-action-tile phantom-action-feature" onclick="showAppView('farms')" aria-label="Alle Höfe entdecken">
+                    <span class="phantom-action-image" aria-hidden="true"></span>
+                    <span class="phantom-action-overlay"></span>
+                    <span class="phantom-feature-frame" aria-hidden="true"></span>
+                    <span class="phantom-action-content">
+                        <span class="phantom-action-kicker">HOFKATALOG</span>
+                        <strong>Die Höfe entdecken</strong>
+                        <span class="phantom-action-description">Alle Betriebe, Preise und die wichtigsten Eckdaten in einer übersichtlichen Sammlung.</span>
+                        <span class="phantom-action-link">Höfe öffnen&nbsp; <b>→</b></span>
+                    </span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-finder" onclick="showAppView('finder')" aria-label="Hof-Finder öffnen">
+                    <span class="phantom-action-icon" aria-hidden="true">⌕</span>
+                    <span class="phantom-card-index">01</span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">FINDER</span><strong>Passenden Hof finden</strong><span class="phantom-action-reveal">Preis, Größe und Kriterien kombinieren.</span><span class="phantom-card-arrow">↗</span></span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-focus" onclick="openHofDay()" aria-label="Hof des Tages öffnen">
+                    <span class="phantom-action-icon" aria-hidden="true">★</span>
+                    <span class="phantom-card-index">02</span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">HEUTE IM FOKUS</span><strong>Hof des Tages</strong><span class="phantom-action-reveal">Ein Betrieb bekommt heute die Bühne.</span><span class="phantom-card-arrow">↗</span></span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-dark" onclick="showAppView('favorites')" aria-label="Gespeicherte Höfe öffnen">
+                    <span class="phantom-action-icon" aria-hidden="true">♥</span>
+                    <span class="phantom-card-index">03</span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">MERKLISTE</span><strong>Gespeicherte Höfe</strong><span class="phantom-action-reveal">Deine Favoriten an einem Ort.</span><span class="phantom-card-arrow">↗</span></span>
+                </button>
+
+                <button type="button" class="phantom-action-tile phantom-action-slate" onclick="showAppView('compare')" aria-label="Hofvergleich öffnen">
+                    <span class="phantom-action-icon" aria-hidden="true">⚖</span>
+                    <span class="phantom-card-index">04</span>
+                    <span class="phantom-action-content"><span class="phantom-action-kicker">VERGLEICH</span><strong>Höfe direkt vergleichen</strong><span class="phantom-action-reveal">Bis zu drei Betriebe nebeneinander.</span><span class="phantom-card-arrow">↗</span></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Hof des Tages -->
+        <section id="hof-day-section" class="day-card day-card-modern rounded-2xl mb-8 overflow-hidden">
+            <div class="day-card-media">
+                <img id="hof-day-image" src="grafik.jpg" alt="Hof des Tages" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                <span class="day-card-media-label">HEUTE IM FOKUS</span>
+            </div>
+            <div class="day-card-body">
+                <div class="day-card-copy min-w-0">
+                    <div class="text-xs uppercase tracking-[0.16em] font-black text-emerald-600 dark:text-emerald-400">Hof des Tages</div>
+                    <div id="hof-day-number" class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-1">—</div>
+                    <h2 id="hof-day-title" class="text-2xl sm:text-3xl font-black mt-0 break-words">—</h2>
+                    <p id="hof-day-meta" class="text-sm text-slate-600 dark:text-slate-300 mt-1">—</p>
+                    <p id="hof-day-description" class="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">—</p>
                 </div>
                 <div class="day-card-actions flex flex-wrap gap-2 shrink-0">
                     <button type="button" onclick="openHofDay()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold">🏡 Exposé öffnen</button>

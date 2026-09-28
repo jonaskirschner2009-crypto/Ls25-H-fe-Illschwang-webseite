@@ -641,6 +641,8 @@
             if(badge){badge.textContent=n.number||''; badge.classList.toggle('hidden',!n.number);}
             document.getElementById('hof-day-meta').textContent=`${h.preis} · ${h.groesse} · ${h.schwerpunkt||'Landwirtschaft'}`;
             document.getElementById('hof-day-description').textContent=h.slogan||h.beschreibung||'';
+            const dayImage=document.getElementById('hof-day-image');
+            if(dayImage){ dayImage.src=(h.bilder&&h.bilder[0])||'grafik.jpg'; dayImage.alt=`${n.title} – Hof des Tages`; }
             const b=document.getElementById('hof-day-favorite'); const fav=favoriteHoefe.includes(h.id); b.textContent=fav?'♥ Gemerkt':'♡ Merken';
         }
         function openHofDay(){const h=getHofDay();if(h)openModal(h.id);}
@@ -786,14 +788,32 @@
                 const isVerkauft = status === 'verkauft';
                 const kaeufer = hofKaeufer[hof.id];
                 const card = document.createElement('div');
-                card.className = `hof-card-v31 rounded-xl shadow-sm border transition-all duration-200 p-6 flex flex-col justify-between hover:shadow-md cursor-pointer ${isVerkauft ? 'bg-red-100/80 dark:bg-red-950/20 border-red-300 dark:border-red-900/50' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'}`;
+                const cover = (hof.bilder && hof.bilder.length) ? hof.bilder[0] : 'grafik.jpg';
+                const n = getHofDisplayName(hof.name);
+                card.className = `hof-card-v31 hof-phantom-card rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 cursor-pointer ${isVerkauft ? 'hof-card-sold bg-red-100/80 dark:bg-red-950/20 border-red-300 dark:border-red-900/50' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'}`;
                 card.onclick = (e) => { if (!e.target.closest('button')) openModal(hof.id); };
                 card.innerHTML = `
+                    <div class="hof-phantom-visual">
+                        <img src="${escapeHtmlAttr(cover)}" alt="${escapeHtmlAttr(hof.name)}" loading="lazy" onerror="this.onerror=null;this.src='grafik.jpg'">
+                        <div class="hof-phantom-tint"></div>
+                        <div class="hof-phantom-gridline" aria-hidden="true"></div>
+                        <div class="hof-phantom-title">
+                            <span class="hof-card-number-v32">${escapeHtmlAttr(n.number)}</span>
+                            <h3>${escapeHtmlAttr(n.title)}</h3>
+                            <span class="hof-phantom-status ${isVerkauft ? 'is-sold' : ''}">${isVerkauft ? 'Verkauft' : 'Zu verkaufen'}</span>
+                        </div>
+                        <div class="hof-phantom-hover-copy">
+                            <span>${escapeHtmlAttr(hof.slogan || 'Hof der Illschwang')}</span>
+                            <strong>Details öffnen&nbsp; →</strong>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex flex-col justify-between gap-5">
                     <div>
                         <div class="hof-card-header-v31 mb-3">
                             <div class="hof-card-title-actions-v31">
                                 <div class="hof-card-name-v32 min-w-0 flex-1">
-                                    ${(()=>{const n=getHofDisplayName(hof.name); return `<div class="hof-card-number-v32">${escapeHtmlAttr(n.number)}</div><h3 class="hof-card-title-main">${escapeHtmlAttr(n.title)}</h3>`;})()}
+                                    <div class="text-[11px] uppercase tracking-[0.16em] font-black text-slate-400 dark:text-slate-500">Hofprofil</div>
+                                    <div class="hof-card-title-main">${escapeHtmlAttr(n.title)}</div>
                                 </div>
                                 <button type="button" onclick="toggleFavorite(event, ${hof.id})" title="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" aria-label="${favoriteHoefe.includes(hof.id)?'Favorit entfernen':'Zu Favoriten hinzufügen'}" class="favorite-btn ${favoriteHoefe.includes(hof.id)?'favorite-active':''} min-w-10 min-h-10 px-2 text-2xl inline-flex items-center justify-center shrink-0">${favoriteHoefe.includes(hof.id)?'♥':'♡'}</button>
                                 <button type="button" onclick="toggleCompare(event, ${hof.id})" title="Hof vergleichen" aria-label="Hof vergleichen" class="px-2 min-w-10 min-h-10 rounded-lg text-lg hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0 ${compareHoefe.includes(hof.id)?'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30':''}">${compareHoefe.includes(hof.id)?'✓':'⚖️'}</button>
@@ -811,7 +831,8 @@
                             <div class="flex justify-between items-center gap-2"><span class="text-slate-500 dark:text-slate-400 shrink-0 flex items-center gap-1.5">🚜 Schwerpunkt:</span><span class="font-semibold text-right">${hof.schwerpunkt}</span></div>
                         </div>
                     </div>
-                    <div class="border-t-2 border-b-4 border-double border-slate-300 dark:border-slate-700 mt-6 pt-2 pb-2 flex justify-between items-center"><span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Gesamtpreis</span><span class="text-lg font-black text-slate-900 dark:text-white">${hof.preis}</span></div>`;
+                    <div class="border-t-2 border-b-4 border-double border-slate-300 dark:border-slate-700 pt-2 pb-2 flex justify-between items-center"><span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Gesamtpreis</span><span class="text-lg font-black text-slate-900 dark:text-white">${hof.preis}</span></div>
+                    </div>`;
                 grid.appendChild(card);
             });
         }
@@ -2487,6 +2508,7 @@ function updateFilterButtonsV31(){
   });
 }
 function showAppView(view){
+  const quick=document.getElementById('phantom-quick-actions');
   const day=document.getElementById('hof-day-section');
   const compare=document.getElementById('hof-compare-panel');
   const finder=document.getElementById('hof-finder-panel');
@@ -2502,7 +2524,7 @@ function showAppView(view){
   // Jede Ansicht bekommt eine eindeutig definierte Sichtbarkeit.
   // Nicht nur Tailwinds .hidden verwenden: display:none wird zusätzlich inline gesetzt,
   // damit kein alter Zustand des Finders oder eine CSS-Regel ihn wieder sichtbar macht.
-    const sections=[day,compare,finder,grid,profile,applications].filter(Boolean);
+    const sections=[quick,day,compare,finder,grid,profile,applications].filter(Boolean);
   sections.forEach(el=>{
     el.classList.add('hidden');
     el.classList.remove('app-view-enter');
@@ -2516,7 +2538,7 @@ function showAppView(view){
   };
 
   if(view==='home'){
-    show(day); show(grid);
+    show(quick); show(day); show(grid);
   } else if(view==='farms'){
     show(grid);
   } else if(view==='finder'){
@@ -2572,7 +2594,7 @@ function showAppView(view){
   document.querySelectorAll('.app-view-enter').forEach(el=>el.classList.remove('app-view-enter'));
   if(isMotionEnabled() && previousView!==currentAppView){
     void document.body.offsetWidth;
-    const visible=[day,compare,finder,grid,profile].filter(el=>el && el.style.display!=='none');
+    const visible=[quick,day,compare,finder,grid,profile,applications].filter(el=>el && el.style.display!=='none');
     visible.forEach(el=>el.classList.add('app-view-enter'));
     document.body.classList.add('view-transitioning');
     viewTransitionTimer=setTimeout(()=>{

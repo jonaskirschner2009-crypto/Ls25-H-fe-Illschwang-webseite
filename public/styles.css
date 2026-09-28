@@ -1295,3 +1295,110 @@ main > .bg-white:first-child {
 @media (prefers-reduced-motion: reduce) {
   .app-view-enter { animation: none !important; }
 }
+
+/* ================================================================
+   Phantom-inspired visual system – final home composition
+   ================================================================ */
+.phantom-section{position:relative}
+.phantom-section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;margin:0 0 1.05rem;padding:0 .05rem}
+.phantom-section-heading>div:first-child{min-width:0}
+.phantom-section-heading h2{margin:.28rem 0 0;color:#f8fafc;font-size:clamp(2rem,3.5vw,2.9rem);line-height:1.02;letter-spacing:-.055em;font-weight:950}
+.phantom-eyebrow{display:inline-flex;align-items:center;gap:.5rem;color:#86efac;font-size:.64rem;font-weight:950;letter-spacing:.17em;text-transform:uppercase}
+.phantom-eyebrow::before{content:"";display:inline-block;width:2.2rem;height:2px;border-radius:999px;background:currentColor;opacity:.9}
+.phantom-heading-meta{display:flex;align-items:flex-start;gap:.75rem;max-width:40rem;padding-bottom:.18rem}
+.phantom-heading-meta p{max-width:31rem;margin:0;color:#94a3b8;font-size:.88rem;line-height:1.55}
+.phantom-count-badge{flex:none;padding:.34rem .58rem;border:1px solid rgba(134,239,172,.24);border-radius:999px;color:#bbf7d0;background:rgba(16,185,129,.08);font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+
+.phantom-action-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:repeat(2,minmax(0,220px));gap:.9rem}
+.phantom-action-tile{position:relative;min-width:0;min-height:0;overflow:hidden;padding:0;border:1px solid rgba(148,163,184,.17);border-radius:1.05rem;text-align:left;color:#fff;isolation:isolate;cursor:pointer;box-shadow:0 12px 34px rgba(2,6,23,.16);transition:transform .32s cubic-bezier(.22,.8,.25,1),box-shadow .32s ease,border-color .32s ease,filter .32s ease}
+.phantom-action-tile:hover{transform:translateY(-4px);box-shadow:0 23px 48px rgba(2,6,23,.28);border-color:rgba(134,239,172,.32);filter:saturate(1.03)}
+.phantom-action-tile:focus-visible{outline:3px solid rgba(74,222,128,.55);outline-offset:3px}
+.phantom-action-feature{grid-row:span 2;min-height:448px;background:#0a1510}
+.phantom-action-image{position:absolute;inset:0;z-index:-4;background:url("grafik.jpg") 50% 42%/cover no-repeat;transform:scale(1.01);transition:transform .6s cubic-bezier(.22,.8,.25,1),filter .4s ease}
+.phantom-action-feature:hover .phantom-action-image{transform:scale(1.055);filter:saturate(1.04)}
+.phantom-action-overlay{position:absolute;inset:0;z-index:-3;background:linear-gradient(180deg,rgba(2,6,23,.04) 6%,rgba(2,6,23,.18) 34%,rgba(2,6,23,.86) 77%,rgba(2,6,23,.97) 100%)}
+.phantom-feature-frame{position:absolute;inset:.65rem;border:1px solid rgba(255,255,255,.13);border-radius:.78rem;z-index:-2;pointer-events:none}
+.phantom-action-feature::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(135deg,rgba(134,239,172,.17),transparent 30%),linear-gradient(135deg,transparent 49.7%,rgba(255,255,255,.2) 50%,transparent 50.3%);opacity:.7}
+
+.phantom-action-finder,.phantom-action-focus,.phantom-action-dark,.phantom-action-slate{background:#0f172a}
+.phantom-action-finder{background:radial-gradient(120% 120% at 100% 0%,rgba(52,211,153,.24),transparent 53%),linear-gradient(145deg,#0b3024,#083c2b)}
+.phantom-action-focus{background:radial-gradient(110% 120% at 0% 0%,rgba(163,230,53,.2),transparent 52%),linear-gradient(145deg,#2d4b0f,#1d330c)}
+.phantom-action-dark{background:radial-gradient(120% 120% at 100% 10%,rgba(56,189,248,.11),transparent 55%),linear-gradient(145deg,#101827,#071019)}
+.phantom-action-slate{background:radial-gradient(120% 110% at 10% 0%,rgba(129,140,248,.16),transparent 50%),linear-gradient(145deg,#202b42,#111827)}
+.phantom-action-finder::before,.phantom-action-focus::before,.phantom-action-dark::before,.phantom-action-slate::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.32;background-image:linear-gradient(135deg,transparent 49.6%,rgba(255,255,255,.23) 50%,transparent 50.4%),linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:auto,24px 24px,24px 24px}
+
+.phantom-action-icon{display:grid;place-items:center;width:3rem;height:3rem;margin:1.15rem;border:1px solid rgba(255,255,255,.18);border-radius:.9rem;background:rgba(255,255,255,.09);backdrop-filter:blur(9px);font-size:1.35rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 18px rgba(2,6,23,.12)}
+.phantom-card-index{position:absolute;right:1.1rem;top:1.2rem;color:rgba(255,255,255,.48);font-size:.62rem;font-weight:900;letter-spacing:.16em}
+.phantom-action-content{position:absolute;left:1.1rem;right:1.1rem;bottom:1.1rem;display:flex;flex-direction:column;align-items:flex-start;gap:.34rem;z-index:3}
+.phantom-action-kicker{color:#bbf7d0;font-size:.59rem;font-weight:950;letter-spacing:.17em;text-transform:uppercase}
+.phantom-action-content strong{display:block;max-width:92%;font-size:clamp(1.15rem,1.9vw,1.62rem);line-height:1.08;letter-spacing:-.035em;font-weight:950}
+.phantom-action-feature .phantom-action-content{left:1.45rem;right:1.45rem;bottom:1.45rem}
+.phantom-action-feature .phantom-action-content strong{font-size:clamp(2rem,3.15vw,3rem);max-width:92%}
+.phantom-action-description,.phantom-action-reveal{max-width:38rem;color:rgba(241,245,249,.82);font-size:.77rem;line-height:1.5}
+.phantom-action-link{display:inline-flex;align-items:center;gap:.25rem;margin-top:.12rem;color:#dcfce7;font-size:.74rem;font-weight:950;letter-spacing:.02em}
+.phantom-action-link b{font-size:.95rem;transition:transform .2s ease}
+.phantom-action-feature:hover .phantom-action-link b{transform:translateX(3px)}
+.phantom-action-reveal{opacity:.7;transition:opacity .25s ease,transform .25s ease}
+.phantom-card-arrow{position:absolute;right:0;bottom:0;display:grid;place-items:center;width:2rem;height:2rem;border:1px solid rgba(255,255,255,.13);border-radius:999px;background:rgba(255,255,255,.06);color:#f8fafc;font-size:.95rem;opacity:.78;transition:transform .25s ease,background .25s ease}
+.phantom-action-tile:hover .phantom-action-reveal{opacity:1;transform:translateY(-1px)}
+.phantom-action-tile:hover .phantom-card-arrow{transform:translate(2px,-2px);background:rgba(255,255,255,.12)}
+
+/* Hof des Tages unter der Kachelwand: gleiche Sprache, aber bewusst ruhiger. */
+.day-card-modern{display:grid;grid-template-columns:minmax(250px,.55fr) minmax(0,1.45fr);border:1px solid rgba(148,163,184,.18);background:linear-gradient(120deg,rgba(10,25,36,.98),rgba(6,18,28,.98));box-shadow:0 15px 34px rgba(2,6,23,.18)}
+.day-card-media{position:relative;min-height:190px;overflow:hidden;background:#0f172a}
+.day-card-media img{display:block;width:100%;height:100%;min-height:190px;object-fit:cover;transform:scale(1.01);transition:transform .55s ease,filter .4s ease}
+.day-card-modern:hover .day-card-media img{transform:scale(1.055);filter:saturate(1.05)}
+.day-card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,6,23,.04),rgba(2,6,23,.28) 55%,rgba(2,6,23,.72))}
+.day-card-media-label{position:absolute;top:1rem;left:1rem;z-index:2;padding:.36rem .58rem;border-radius:999px;background:rgba(2,6,23,.62);border:1px solid rgba(255,255,255,.17);backdrop-filter:blur(8px);color:#dcfce7;font-size:.59rem;font-weight:950;letter-spacing:.12em}
+.day-card-body{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.45rem 1.55rem}
+.day-card-copy{max-width:48rem}
+.day-card-actions{justify-content:flex-end}
+
+/* Hofkarten behalten das Phantom-Motiv, aber die Daten bleiben sichtbar und funktional. */
+.hof-phantom-card{position:relative;isolation:isolate}
+.hof-phantom-card:hover{transform:translateY(-5px)!important;box-shadow:0 24px 50px rgba(2,6,23,.28)!important}
+.hof-phantom-visual{position:relative;aspect-ratio:16/8.8;overflow:hidden;background:#0f172a}
+.hof-phantom-visual img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.01);transition:transform .55s ease,filter .45s ease}
+.hof-phantom-card:hover .hof-phantom-visual img{transform:scale(1.075);filter:saturate(1.08)}
+.hof-phantom-tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.04) 6%,rgba(15,23,42,.16) 42%,rgba(2,6,23,.9) 100%);pointer-events:none}
+.hof-phantom-gridline{position:absolute;inset:0;background-image:linear-gradient(135deg,transparent 49.55%,rgba(255,255,255,.26) 49.8%,transparent 50.05%);opacity:.38;pointer-events:none;transition:opacity .35s ease}
+.hof-phantom-card:hover .hof-phantom-gridline{opacity:.08}
+.hof-phantom-title{position:absolute;left:1.2rem;right:1.2rem;bottom:1.05rem;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+.hof-phantom-title .hof-card-number-v32{color:#bbf7d0}
+.hof-phantom-title h3{margin:.12rem 0 .55rem;font-size:clamp(1.3rem,2.5vw,2rem);line-height:1.05;font-weight:950;letter-spacing:-.035em;max-width:90%}
+.hof-phantom-status{display:inline-flex;padding:.35rem .62rem;border-radius:999px;background:rgba(16,185,129,.18);border:1px solid rgba(167,243,208,.28);color:#dcfce7;font-size:.62rem;font-weight:950;text-transform:uppercase;letter-spacing:.1em;backdrop-filter:blur(8px)}
+.hof-phantom-status.is-sold{background:rgba(127,29,29,.42);border-color:rgba(254,202,202,.3);color:#fee2e2}
+.hof-phantom-hover-copy{position:absolute;top:1rem;right:1rem;left:1rem;display:flex;justify-content:space-between;gap:.75rem;align-items:center;color:#fff;opacity:0;transform:translateY(-6px);transition:opacity .35s ease,transform .35s ease;pointer-events:none}
+.hof-phantom-hover-copy span,.hof-phantom-hover-copy strong{font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:rgba(2,6,23,.5);padding:.45rem .65rem;border-radius:.7rem;backdrop-filter:blur(8px)}
+.hof-phantom-card:hover .hof-phantom-hover-copy{opacity:1;transform:none}
+.hof-phantom-card .hof-card-title-actions-v31{align-items:flex-start}
+.hof-phantom-card .hof-card-title-main{font-size:1.12rem}
+
+@media(max-width:900px){
+  .phantom-section-heading{align-items:flex-start;flex-direction:column;gap:.65rem}
+  .phantom-heading-meta{max-width:none;width:100%}
+  .phantom-action-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,190px))}
+  .phantom-action-feature{grid-column:span 2;grid-row:span 1;min-height:360px}
+  .day-card-modern{grid-template-columns:1fr}
+  .day-card-media{min-height:175px}
+  .day-card-media img{min-height:175px;max-height:260px}
+  .day-card-media::after{background:linear-gradient(180deg,rgba(2,6,23,.05),rgba(2,6,23,.72))}
+}
+@media(max-width:620px){
+  .phantom-section-heading{margin-bottom:.8rem}
+  .phantom-section-heading h2{font-size:1.85rem}
+  .phantom-heading-meta{display:block}
+  .phantom-count-badge{display:inline-flex;margin-bottom:.45rem}
+  .phantom-action-grid{grid-template-columns:1fr;grid-template-rows:none;gap:.7rem}
+  .phantom-action-feature{grid-column:auto;grid-row:auto;min-height:330px}
+  .phantom-action-tile:not(.phantom-action-feature){min-height:185px}
+  .phantom-action-feature .phantom-action-content strong{font-size:2rem}
+  .day-card-body{align-items:flex-start;flex-direction:column;padding:1.15rem;gap:1rem}
+  .day-card-actions{justify-content:flex-start;width:100%}
+  .day-card-actions button{flex:1 1 auto}
+  .hof-phantom-visual{aspect-ratio:16/10}
+  .hof-phantom-hover-copy{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .phantom-action-tile,.phantom-action-image,.hof-phantom-card,.hof-phantom-visual img,.day-card-media img,.phantom-action-reveal,.phantom-card-arrow{transition:none!important}
+}
